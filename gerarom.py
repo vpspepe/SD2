@@ -2,7 +2,7 @@
 import itertools
 
 
-width = 8
+width = 5
 a_width = width
 b_width = width
 z_width = a_width + b_width
