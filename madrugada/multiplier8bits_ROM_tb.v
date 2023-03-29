@@ -21,8 +21,8 @@ module multiplier8bits_ROM_tb;
         RESET_tb = 0;
 
         #10
-        w_tb = 8'd6; 
-        y_tb = 8'd10; 
+        w_tb = 8'd17; 
+        y_tb = 8'd23; 
         
     end
     always #10 CLK_tb = ~CLK_tb;

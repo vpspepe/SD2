@@ -1,5 +1,6 @@
 
 
+
 // Grupo 06
 // Integrantes
 // Marcelo Takayama Russo - 13680164
@@ -34,7 +35,8 @@ assign result = result_reg;
 multiplier_ROM ROM(.a(rom1), .z(rom_result));
 
 parameter IDLE = 4'b0000, START = 4'b0001, SOMA_WY = 4'b0010, MULT_A = 4'b0011, MULT_B = 4'b0100, MULT_DE = 4'b0101, 
-          SOMA_AB = 4'b0110, SOMA_DE_ABshift = 4'b0111, SOMA_FINAL = 4'b1000, DONE = 4'b1001;
+          SOMA_AB = 4'b0110, SOMA_DE_ABshift = 4'b0111, SOMA_FINAL = 4'b1000, DONE = 4'b1001, ATRIB_A = 4'b1010, ATRIB_B = 4'b1011,
+          ATRIB_DE = 4'b1100;
 
 always @(posedge CLK or posedge S or posedge RESET) begin
     if (RESET == 1)
@@ -55,14 +57,26 @@ always @(posedge CLK or posedge S or posedge RESET) begin
             end
 
             MULT_A: begin
+                states <= ATRIB_A;
+            end
+
+            ATRIB_A: begin
                 states <= MULT_B;
             end
 
             MULT_B: begin
+                states <= ATRIB_B;
+            end
+
+            ATRIB_B: begin
                 states <= MULT_DE;
             end
 
             MULT_DE: begin
+                states <= ATRIB_DE;
+            end
+
+            ATRIB_DE: begin
                 states <= SOMA_AB;
             end
 
@@ -107,26 +121,35 @@ always @(posedge CLK) begin
     
         MULT_A: begin
 
-            rom1 <= {w[3:0], y[3:0]};
+            rom1 <= {1'b0,w[3:0],1'b0, y[3:0]};
             //rom2 <= y[3:0];
-            A <= rom_result;
             //result_reg <= rom_result;
+        end
+
+        ATRIB_A: begin
+            A <= rom_result;
         end
 
         MULT_B: begin
             
-            rom1 <= {w[7:4], y[7:4]};
+            rom1 <= {1'b0,w[7:4],1'b0, y[7:4]};
             //rom2 <= y[7:4];
             //B <= rom_result;
-            result_reg <= rom_result;
+        end
+
+        ATRIB_B: begin
+            B <= rom_result;
         end
         
         MULT_DE: begin 
             //result_reg <= 2;
             rom1 <= {D, E};
             //rom2 <= E;
-            DE <= rom_result;
             //result_reg <= rom_result;
+        end
+
+        ATRIB_DE: begin
+            DE <= rom_result;
         end
         
         SOMA_AB: begin
