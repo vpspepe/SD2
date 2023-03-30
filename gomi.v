@@ -1,0 +1,1 @@
+$monitor("bom dia, Gomi!");
