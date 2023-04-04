@@ -1,11 +1,12 @@
 module UC_multiplier8bits(
     input clk, start, RESET,
-    output reg LD_XY, LD_D, LD_E,LD_A,LD_B,LD_DE, LD_RES,
-    output reg[1:0] SELROM, SELSOMA,
+    output reg LD_XY, LD_DE0,LD_A,LD_B,LD_DE1, LD_AB, LD_DE_ABshift, LD_RES,
+    output reg[1:0] SELROM, 
+    output reg[2:0] SELSOMA,
     output reg DONE
 );
 reg[3:0] states;
-parameter IDLE = 0, START = 1, LD1=2, MULT1=3, LDA=4, MULT2=5, LDB=6, MULT3=7, LDDE=8, SOMA_AB=9, SOMA_ABSHIFT = 10, SUB_DE_AB=11, SOMA_FINAL=12, FIM=13;
+parameter IDLE = 0, START = 1, LD1=2, MULT1=3, LDA=4, MULT2=5, LDB=6, MULT3=7, LDDE=8, SOMA_AB=9, SOMA_ABSHIFT = 10, SUB_DE_AB=11, LDDEABshift = 12, SOMA_FINAL=13, FIM=14;
 
 always @(posedge clk or posedge start or posedge RESET) begin
     if (RESET == 1)
@@ -58,6 +59,10 @@ always @(posedge clk or posedge start or posedge RESET) begin
             end
 
             SUB_DE_AB: begin
+                states <= LDDEABshift;
+            end
+
+            LDDEABshift: begin
                 states <= SOMA_FINAL;
             end
 
@@ -75,11 +80,12 @@ always @(posedge clk) begin
             IDLE: begin
 
                 LD_XY <=0;
-                LD_D <=0;
-                LD_E<=0;
+                LD_DE0 <=0;
                 LD_A<=0;
                 LD_B<=0;
-                LD_DE<=0;
+                LD_DE1<=0;
+                LD_AB<=0;
+                LD_DE_ABshift <=0;
                 LD_RES<=0;
                 SELROM<=0;
                 SELSOMA<=0;
@@ -91,12 +97,13 @@ always @(posedge clk) begin
             end
 
             LD1: begin
-                LD_D<=1;
-                LD_E<=1;
+                LD_XY<= 0;
+                LD_DE0<=1;
             end
 
             MULT1: begin
-                SELROM<= 0;
+                LD_DE0<=0;
+                SELROM<= 1;
             end
 
             LDA: begin
@@ -104,7 +111,8 @@ always @(posedge clk) begin
             end
 
             MULT2: begin
-                SELROM<= 1;
+                LD_A<= 0;
+                SELROM<= 2;
             end
 
             LDB: begin
@@ -112,15 +120,19 @@ always @(posedge clk) begin
             end
 
             MULT3: begin
-                SELROM <= 2; 
+                LD_B<= 0;
+                SELROM <= 3; 
             end
 
             LDDE: begin
-                LD_DE <= 1;
+                LD_DE1 <= 1;
             end
 
             SOMA_AB: begin
-                SELSOMA <= 0;
+                SELROM <= 0; 
+                LD_DE1 <= 0;
+                SELSOMA <= 1;
+                LD_AB <= 1;
             end
 
             SOMA_ABSHIFT: begin
@@ -128,10 +140,16 @@ always @(posedge clk) begin
             end
 
             SUB_DE_AB: begin
+                LD_AB <=0;
                 SELSOMA <= 2;
             end
 
+            LDDEABshift: begin
+                LD_DE_ABshift<= 1;
+            end
+
             SOMA_FINAL: begin
+                LD_DE_ABshift <= 0;
                 SELSOMA <= 3;
             end    
 
@@ -141,7 +159,5 @@ always @(posedge clk) begin
             end
     endcase
 end
-
-
 
 endmodule
