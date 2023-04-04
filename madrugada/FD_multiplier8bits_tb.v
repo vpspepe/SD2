@@ -4,7 +4,7 @@ module FD_multiplier8bits_tb;
 
     reg [7:0] x_tb, y_tb;
     reg CLK_tb, RESET_tb;
-    reg LD_XY_tb, LD_A_tb, LD_B_tb, LD_DE0_tb,LD_DE1_tb;
+    reg LD_XY_tb, LD_A_tb, LD_B_tb, LD_DE0_tb,LD_DE1_tb, LD_AB_tb, LD_DE_ABshift_tb, LD_RES_tb;
     reg [1:0] SELROM_tb;
     reg [1:0] SELSOMA_tb;
     wire [15:0] result_tb;
@@ -12,7 +12,7 @@ module FD_multiplier8bits_tb;
 
     FD_multiplier8bits uut(.x(x_tb), .y(y_tb),
     .LD_XY(LD_XY_tb), .LD_DE0(LD_DE0_tb), .LD_A(LD_A_tb), .LD_B(LD_B_tb), 
-    .LD_DE1(LD_DE1_tb),.SELROM(SELROM_tb), .SELSOMA(SELSOMA_tb),
+    .LD_DE1(LD_DE1_tb),.LD_AB(LD_AB_tb), .LD_DE_ABshift(LD_DE_ABshift_tb), .LD_RES(LD_RES_tb),   .SELROM(SELROM_tb), .SELSOMA(SELSOMA_tb),
     .CLK(CLK_tb), .RESET(RESET_tb), 
     .result(result_tb), .PRONTO(PRONTO_tb));
 
@@ -26,6 +26,9 @@ module FD_multiplier8bits_tb;
         LD_B_tb = 0;
         LD_DE0_tb = 0;
         LD_DE1_tb = 0;
+        LD_AB_tb = 0;
+        LD_DE_ABshift_tb =0;
+        LD_RES_tb = 0;
         CLK_tb = 1;
         RESET_tb = 1;
         SELSOMA_tb = 0;
@@ -35,8 +38,9 @@ module FD_multiplier8bits_tb;
         RESET_tb = 0;
 
         #30
-        x_tb = 8'd5; 
-        y_tb = 8'd7; 
+        x_tb = 8'd14; 
+        y_tb = 8'd8; 
+        #20
         LD_XY_tb = 1;
         
         
@@ -49,7 +53,6 @@ module FD_multiplier8bits_tb;
         SELROM_tb  = 1;
 
         #70
-        SELROM_tb  = 0;
         LD_A_tb = 1;
 
         #80
@@ -57,7 +60,6 @@ module FD_multiplier8bits_tb;
         SELROM_tb  = 2;
         
         #90
-        SELROM_tb  = 0;
         LD_B_tb = 1;
         
 
@@ -66,21 +68,38 @@ module FD_multiplier8bits_tb;
         SELROM_tb  = 3;
 
         #110
-        SELROM_tb = 0;
         LD_DE1_tb = 1;
+        #10
+        SELROM_tb = 0;
 
         #120
         LD_DE1_tb = 0;
         SELSOMA_tb = 1;
 
+        #10 
+        LD_AB_tb = 1;
+
         #130
+        LD_AB_tb = 0;
         SELSOMA_tb = 2;
 
+        #10
+        LD_DE_ABshift_tb = 1;
+
         #10 
+        LD_DE_ABshift_tb = 0;
         SELSOMA_tb = 3;
+
+        #10
+        LD_RES_tb = 1;
+        #10
+        LD_RES_tb = 0;
+
 
         #190
         RESET_tb = 1;
+        #10
+        RESET_tb = 0;
 
 
         

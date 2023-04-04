@@ -1,8 +1,7 @@
 module UC_multiplier8bits(
     input clk, start, RESET,
     output reg LD_XY, LD_DE0,LD_A,LD_B,LD_DE1, LD_AB, LD_DE_ABshift, LD_RES,
-    output reg[1:0] SELROM, 
-    output reg[2:0] SELSOMA,
+    output reg[1:0] SELROM, SELSOMA,
     output reg DONE
 );
 reg[3:0] states;

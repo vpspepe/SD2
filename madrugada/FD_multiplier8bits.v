@@ -1,6 +1,6 @@
 module FD_multiplier8bits(
     input[7:0] x, y,
-    input LD_XY, LD_DE0, LD_A, LD_B, LD_DE1,
+    input LD_XY, LD_DE0, LD_A, LD_B, LD_DE1, LD_AB, LD_DE_ABshift, LD_RES,
     input [1:0] SELROM, SELSOMA,
     input wire  CLK, RESET,
     output [15:0] result,
@@ -24,7 +24,7 @@ assign result = result_reg;
 multiplier_ROM ROM(.a(rom1), .z(rom_result));
 
 
-always@(posedge CLK) begin
+always @(posedge CLK) begin
 
     if (RESET == 1) begin
         X <= 0;
@@ -65,7 +65,7 @@ always@(posedge CLK) begin
 
 
     else if(SELROM == 2) begin
-    result_reg <= A;
+        result_reg <= A;
         rom1 <= {1'b0,x[7:4],1'b0, y[7:4]};
     end
 
@@ -90,16 +90,20 @@ always@(posedge CLK) begin
 
     else if(SELSOMA == 1) begin
         result_reg <= DE;
+        
+    end
+
+    else if(LD_AB == 1) begin
         ABsum <= A+B;
         ABshiftsum <= {B,A};
     end
 
-
     else if(SELSOMA == 2) begin
         result_reg <= ABsum;
-        DE_AB <= (DE - ABsum)<<4;
+        
     end
-
+    else if(LD_DE_ABshift)
+        DE_AB <= (DE - ABsum)<<4;
 
     else if(SELSOMA == 3) begin
         result_reg <=  DE_AB + ABshiftsum;
