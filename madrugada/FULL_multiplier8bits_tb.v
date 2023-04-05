@@ -27,16 +27,18 @@ FD_multiplier8bits FD(
 
 initial begin
 
-$monitor("X = %d || Y = %d || resultado = %d || PRONTO = %d || start = %d",x_tb,y_tb,result_tb,DONE_tb,start_tb);
+$monitor("X = %d || Y = %d || LDXY = %d || LDD0 = %d || LDA = %d || LDB = %d || LDDE1 = %d || LDAB = %d || LDDEABSHIFT = %d || LDRES = %d || resultado = %d || PRONTO = %d || start = %d ||SELROM = %d || SOLSOMA = %d || ",x_tb,y_tb, LD_XY_tb, LD_DE0_tb, LD_A_tb, LD_B_tb, LD_DE1_tb, LD_AB_tb, LD_DE_ABshift_tb, LD_RES_tb,result_tb,DONE_tb,start_tb, SELROM_tb,SELSOMA_tb);
         CLK_tb = 1;
-        RESET_tb = 1;
+        RESET_tb = 0;
         start_tb = 1;
         #10
+        RESET_tb = 1;
+        #10 
         RESET_tb = 0;
 
         #10
-        x_tb = 8'd17; 
-        y_tb = 8'd23; 
+        x_tb = 8'd25; 
+        y_tb = 8'd14; 
 end 
 
 always #10 CLK_tb = ~CLK_tb;

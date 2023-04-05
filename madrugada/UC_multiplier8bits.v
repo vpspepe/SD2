@@ -5,7 +5,7 @@ module UC_multiplier8bits(
     output reg DONE
 );
 reg[3:0] states;
-parameter IDLE = 0, START = 1, LD1=2, MULT1=3, LDA=4, MULT2=5, LDB=6, MULT3=7, LDDE=8, SOMA_AB=9, SOMA_ABSHIFT = 10, SUB_DE_AB=11, LDDEABshift = 12, SOMA_FINAL=13, FIM=14;
+parameter IDLE = 0, START = 1, LD1=2, MULT1=3, LDA=4, MULT2=5, LDB=6, MULT3=7, LDDE=8, SOMA_AB=9,LDAB = 10, SUB_DE_AB=11, LDDEABshift = 12, SOMA_FINAL=13, FIM=14;
 
 always @(posedge clk or posedge start or posedge RESET) begin
     if (RESET == 1)
@@ -50,10 +50,10 @@ always @(posedge clk or posedge start or posedge RESET) begin
             end
 
             SOMA_AB: begin
-                states <= SOMA_ABSHIFT;
+                states <= LDAB;
             end
 
-            SOMA_ABSHIFT: begin
+            LDAB: begin
                 states <= SUB_DE_AB;
             end
 
@@ -106,6 +106,7 @@ always @(posedge clk) begin
             end
 
             LDA: begin
+                SELROM<= 0;
                 LD_A<= 1;
             end
 
@@ -115,6 +116,7 @@ always @(posedge clk) begin
             end
 
             LDB: begin
+                SELROM<= 0;
                 LD_B<= 1;
             end
 
@@ -124,6 +126,7 @@ always @(posedge clk) begin
             end
 
             LDDE: begin
+                SELROM<= 0;
                 LD_DE1 <= 1;
             end
 
@@ -131,11 +134,12 @@ always @(posedge clk) begin
                 SELROM <= 0; 
                 LD_DE1 <= 0;
                 SELSOMA <= 1;
-                LD_AB <= 1;
+
             end
 
-            SOMA_ABSHIFT: begin
-                SELSOMA <= 1;
+            LDAB: begin
+                LD_AB <= 1;
+                SELSOMA <= 0;
             end
 
             SUB_DE_AB: begin
@@ -145,6 +149,7 @@ always @(posedge clk) begin
 
             LDDEABshift: begin
                 LD_DE_ABshift<= 1;
+                SELSOMA <= 0;
             end
 
             SOMA_FINAL: begin
@@ -155,6 +160,7 @@ always @(posedge clk) begin
             FIM: begin
                 LD_RES <= 1;
                 DONE <= 1;
+                SELSOMA <= 0;
             end
     endcase
 end

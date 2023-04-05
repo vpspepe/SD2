@@ -57,7 +57,7 @@ always @(posedge CLK) begin
 
 
     else if(LD_A) begin
-    result_reg <= rom1;
+        result_reg <= rom1;
         A <= rom_result;
     end
 
