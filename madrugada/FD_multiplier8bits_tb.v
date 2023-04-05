@@ -14,12 +14,12 @@ module FD_multiplier8bits_tb;
     .LD_XY(LD_XY_tb), .LD_DE0(LD_DE0_tb), .LD_A(LD_A_tb), .LD_B(LD_B_tb), 
     .LD_DE1(LD_DE1_tb),.LD_AB(LD_AB_tb), .LD_DE_ABshift(LD_DE_ABshift_tb), .LD_RES(LD_RES_tb),   .SELROM(SELROM_tb), .SELSOMA(SELSOMA_tb),
     .CLK(CLK_tb), .RESET(RESET_tb), 
-    .result(result_tb), .PRONTO(PRONTO_tb));
+    .result(result_tb));
 
     initial begin
 
-        $monitor("RESET = %d || x = %d || y = %d || XY = %d ||DE0 = %d ||A = %d ||B = %d ||DE1 = %d ||SELROM = %d ||SELSOMA = %d || resultado = %d || PRONTO = %d",
-                 RESET_tb,      x_tb,      y_tb,   LD_XY_tb,  LD_DE0_tb, LD_A_tb, LD_B_tb, LD_DE1_tb, SELROM_tb,   SELSOMA_tb,    result_tb,         PRONTO_tb);                                               
+        $monitor("RESET = %d || x = %d || y = %d || XY = %d ||DE0 = %d ||A = %d ||B = %d ||DE1 = %d ||SELROM = %d ||SELSOMA = %d ||LoadRES = %d || resultado = %d || PRONTO = %d",
+                 RESET_tb,      x_tb,      y_tb,   LD_XY_tb,  LD_DE0_tb, LD_A_tb, LD_B_tb, LD_DE1_tb, SELROM_tb,   SELSOMA_tb,    LD_RES_tb,      result_tb,       PRONTO_tb);                                               
         
         LD_XY_tb = 0;
         LD_A_tb = 0;

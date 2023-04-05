@@ -3,8 +3,7 @@ module FD_multiplier8bits(
     input LD_XY, LD_DE0, LD_A, LD_B, LD_DE1, LD_AB, LD_DE_ABshift, LD_RES,
     input [1:0] SELROM, SELSOMA,
     input wire  CLK, RESET,
-    output [15:0] result,
-    output reg PRONTO
+    output [15:0] result
 );  
 
     reg [9:0] rom1; 
@@ -34,7 +33,6 @@ always @(posedge CLK) begin
         DE <= 0;
         ABshiftsum <= 0;
         ABsum <= 0;
-        PRONTO <= 0;
         result_reg <= 0;
     end
 
@@ -107,7 +105,6 @@ always @(posedge CLK) begin
 
     else if(SELSOMA == 3) begin
         result_reg <=  DE_AB + ABshiftsum;
-        PRONTO <= 1;
     end
 end
 
