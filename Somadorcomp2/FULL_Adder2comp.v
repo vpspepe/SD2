@@ -1,4 +1,4 @@
-`timescale 100ns/10ps
+`timescale 10ns/100ps
 
 module FULL_Adder2comp();
 
@@ -25,7 +25,7 @@ FD_Adder2comp FD(.a(a_tb), .b(b_tb), .clk(clk_tb), .RESET(RESET_tb),
 
 
 initial begin
-    $monitor("a = %b || b = %b || loadAB  = %d || loadmagAB = %d || compmag = %d || comp_sinais = %d || soma_sub = %d || loadres = %d || result = %b", a_tb, b_tb, loadAB_tb, loadmagAB_tb, compmag_tb, compsigns_tb, add_sub_tb, loadres_tb, result_tb);
+    $monitor("a = %b  || b = %b  || loadAB  = %d || loadmagAB = %d || compmag = %d || comp_sinais = %d || soma_sub = %d || loadres = %d || result = %b ", a_tb,b_tb, loadAB_tb, loadmagAB_tb, compmag_tb, compsigns_tb, add_sub_tb, loadres_tb, result_tb);
 
     S_tb = 1;
     RESET_tb = 1;
@@ -33,8 +33,8 @@ initial begin
     #20
     RESET_tb = 0;
     #10
-    a_tb = -2;
-    b_tb = -1;
+    a_tb = -3;
+    b_tb = 5;
 end
 
 always begin
