@@ -22,7 +22,7 @@ UC_multiplier8bits UC(                                      // Link das varíave
     .DONE(DONE_tb)
 );
 
-FD_multiplier8bits FD(                                      // Link das varíaveis criadas com o circuito do FD.
+FD_multiplier8bitsc2 FD(                                      // Link das varíaveis criadas com o circuito do FD.
     .x(x_tb), .y(y_tb),
     .LD_XY(LD_XY_tb), .LD_DE0(LD_DE0_tb), .LD_A(LD_A_tb), 
     .LD_B(LD_B_tb), .LD_DE1(LD_DE1_tb),.LD_AB(LD_AB_tb), 
@@ -34,7 +34,7 @@ FD_multiplier8bits FD(                                      // Link das varíave
 
 initial begin
 // Para critérios de teste, o valor do resultado vai recebendo diversos valores ao longo da operação. Isso permite ver a formação do produto final e testar operações intermediárias.
-$monitor("X = %d || Y = %d || resultado = %d || PRONTO = %d || start = %d ", x_tb, y_tb, result_tb,DONE_tb,start_tb);
+$monitor("X = %b || Y = %b || resultado = %b || PRONTO = %d || start = %d ", x_tb, y_tb, result_tb,DONE_tb,start_tb);
         CLK_tb = 1;
         RESET_tb = 0;
         start_tb = 1;
@@ -44,8 +44,8 @@ $monitor("X = %d || Y = %d || resultado = %d || PRONTO = %d || start = %d ", x_t
         RESET_tb = 0;
 
         #10
-        x_tb = 8'd25; 
-        y_tb = 8'd14; 
+        x_tb = 3; 
+        y_tb = -5; 
 end 
 
 always #10 CLK_tb = ~CLK_tb;

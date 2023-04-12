@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module FD_multiplier8bits_tb;
+module FD_multiplier8bitsc2_tb;
 
     reg [7:0] x_tb, y_tb;
     reg CLK_tb, RESET_tb;
@@ -10,7 +10,7 @@ module FD_multiplier8bits_tb;
     wire [15:0] result_tb;
     wire PRONTO_tb; 
 
-    FD_multiplier8bits uut(.x(x_tb), .y(y_tb),
+    FD_multiplier8bitsc2 uut(.x(x_tb), .y(y_tb),
     .LD_XY(LD_XY_tb), .LD_DE0(LD_DE0_tb), .LD_A(LD_A_tb), .LD_B(LD_B_tb), 
     .LD_DE1(LD_DE1_tb),.LD_AB(LD_AB_tb), .LD_DE_ABshift(LD_DE_ABshift_tb), .LD_RES(LD_RES_tb),   .SELROM(SELROM_tb), .SELSOMA(SELSOMA_tb),
     .CLK(CLK_tb), .RESET(RESET_tb), 
