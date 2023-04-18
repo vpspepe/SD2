@@ -44,8 +44,8 @@ $monitor("X = %b || Y = %b || resultado = %b || PRONTO = %d || start = %d ", x_t
         RESET_tb = 0;
 
         #10
-        x_tb = 3; 
-        y_tb = -5; 
+        x_tb = -3; 
+        y_tb = -2; 
 end 
 
 always #10 CLK_tb = ~CLK_tb;
