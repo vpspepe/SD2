@@ -1,20 +1,23 @@
 module FD_loadstore(
-    input[4:0] Ra,   //guarda endereço que será alterado tanto na mem quanto no banco_de_registradore
-    input[4:0] Rb,   //guarda endereço que será usado SÓ PARA LER valores
+    input[4:0] Ra,   //guarda endereço de acesso ao banco de registradores
+    input[4:0] Rb,   //guarda endereço de acesso da memória (constante e igual a 0)
     input[4:0] Rw,  
     input WE_reg, WE_mem,       
-    input[63:0]dIN, //dOUT da memoria eh o dIN dos regs
     output [63:0] doutA, //valor de leitura do Registrador Ra
     output [63:0] doutB, //valor de leitura do Rb
-    //o endereço que entra na memoria (final_address) é doutA+doutB (5 menos significativos)
+    output [63:0] doutMem,
     input clk,
     input [4:0] OFFSET
 );
 
-wire [4:0] final_address;
-wire[63:0] regIN_memOUT, dout_A, dout_B;
 
-assign  final_address = doutA[4:0] + OFFSET;  //5 bits menos significativos do doutA
+wire [4:0] final_address;
+wire [63:0] regIN_memOUT;
+
+
+assign  final_address =  OFFSET;  //5 bits menos significativos do doutB
+assign doutMem = regIN_memOUT;
+
 
 Reg_Banco u1(
             .Ra(Ra),
@@ -28,10 +31,10 @@ Reg_Banco u1(
 );
 
 Memoria u2( 
-     .final_address(final_address),         //guarda endereço que será alterado tanto 
+     .final_address(final_address),
      .WE_mem(WE_mem),
-     .dIN(doutB),
-     .dout(regIN_memOUT), //valor de leitura do Registrador Ra
+     .dIN(doutA),
+     .dout(regIN_memOUT), 
      .clk(clk)
 );
 

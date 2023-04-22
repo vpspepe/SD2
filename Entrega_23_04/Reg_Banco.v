@@ -14,12 +14,12 @@ module Reg_Banco(
 /*!!*/reg [63:0] banco_registradores[31:0]; //ACHO QUE NAO PRECISA DESSES REGS
 /*!!*/wire [63:0] banco_registradores_wire[31:0];
 
-reg[31:0] loads;
+reg [31:0] loads;
 
  RegNbits Regs( //registrador x0 sempre tem o valor 0
                 .x(64'b0),
                 .clk(clk), 
-                .load(loads[0]), 
+                .load(1'b1), 
                 .x_out(banco_registradores_wire[0]) //saida precisava ser fio, e nao reg
                 );
 
@@ -29,13 +29,14 @@ generate
 for (i = 1; i < 32 ; i = i+1 ) begin
 
     RegNbits Regs(
-                .x(dIN),
+                .x(dIN),  //todos os fios recebem dIN, o que vai diferenciar em qual reg vai salvar dIN é o LOAD
                 .clk(clk), 
                 .load(loads[i]), 
                 .x_out(banco_registradores_wire[i]) //saida precisava ser fio, e nao reg
                 );
 end
 endgenerate
+integer j,k;
 
 // acho que esse trecho nao faz sentido, ja que a saida do modulo de regNbits é um fio
 initial begin //inicializa todos os registradores do banco com 0
@@ -43,11 +44,11 @@ initial begin //inicializa todos os registradores do banco com 0
             banco_registradores[j] <= 0;
 end
 
-integer j,k;
+
 
 //ACHO QUE ESSE BLOCO ABAIXO EH DESNCECESSÁRIO
-always @* begin //faz com que os registradores sempre sejam definidos como os fios que saem dos modulos regNbits
-    for (k=0; k<32; k= k+1)
+always @* begin                             //faz com que os registradores sempre sejam definidos como os fios que saem dos modulos regNbits
+    for (k=0; k<32; k = k+1)
     banco_registradores[k] <= banco_registradores_wire[k];
 end
 
@@ -55,14 +56,14 @@ end
 
 
 //Load e store
+
     always @(posedge clk) begin
         doutA <= banco_registradores_wire[Ra];
         doutB <= banco_registradores_wire[Rb];
-        if (WE_Reg) begin
+
+        if (WE_Reg) begin  
             loads[Rw] <= 1;
         end
-        else
-            loads[Rw] <=0;
     end
 
 endmodule
