@@ -40,19 +40,20 @@ initial begin
     doutB_tb);
 OFFSET_tb = 0;
 Ra_tb = 0;
-Rb_tb = 1;
+Rb_tb = 0;
 Rw_tb = 1;
 WE_mem_tb = 0;
 dIN_tb = 12;
 WE_reg_tb = 0;
+clk_tb = 0;
 
 #30
 WE_reg_tb = 1;
 #30
-WE_reg_tb = 0;
-Ra_tb = 1;
+WE_reg_tb = 1;
+Ra_tb = 0;
 #30
-WE_mem_tb = 1;
+WE_mem_tb = 0;
 #30
 WE_mem_tb = 0;
 WE_reg_tb = 1;
