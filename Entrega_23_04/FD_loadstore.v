@@ -11,7 +11,7 @@ module FD_loadstore(
     input [4:0] OFFSET
 );
 
-wire [5:0] final_address;
+wire [4:0] final_address;
 wire[63:0] regIN_memOUT, dout_A, dout_B;
 
 assign  final_address = doutA[4:0] + OFFSET;  //5 bits menos significativos do doutA
@@ -19,8 +19,8 @@ assign  final_address = doutA[4:0] + OFFSET;  //5 bits menos significativos do d
 Reg_Banco u1(
             .Ra(Ra),
             .Rb(Rb),
-            .Rw(RW),
-            .WE(WE),
+            .Rw(Rw),
+            .WE_Reg(WE_reg),
             .dIN(regIN_memOUT),
             .doutA(doutA),
             .doutB(doutB),
