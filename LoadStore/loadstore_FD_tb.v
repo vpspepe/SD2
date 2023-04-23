@@ -1,5 +1,6 @@
-`timescale  10ns/100ps
+// Código compilado usando o compilador do Quartus
 
+`timescale  10ns/100ps
 module loadstore_FD_tb();
 
 reg[4:0] Ra_tb;             //guarda endereço que só mexe no Banco de Registradores 
