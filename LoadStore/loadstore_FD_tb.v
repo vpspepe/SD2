@@ -12,8 +12,7 @@ wire [63:0] doutMem_tb;     //valor de saída da memória e entrada do Banco de 
 reg clk_tb;
 reg [4:0] OFFSET_tb;       
 
-
-FD_loadstore uut(
+loadstore_FD uut(
     .Ra(Ra_tb),
     .Rb(Rb_tb),   
     .Rw(Rw_tb),  
@@ -36,6 +35,7 @@ initial begin
     3a.Após isso, vamos dar STORE do valor que se encontra no endereço 5 do banco de registrador e colocaremos esse valor no endereço
 20 da memória.
     3b.Ao fim, espera-se que o valor 100 se encontre na posição 20 da memória, ou seja, MEM[20] = 100.
+    4. Para um teste final, daremos um novo LOAD o que está na memória 20 no registrador 30. ( ld x30,20(x0) )
 */
 
     $monitor("Ra = %d | OFFSET = %d | Rb = %d | Rw = %d | We_reg = %d | WE_mem = %d | doutA[%d] = %d | doutB= %d | doutMem[%d] = %d",
@@ -84,6 +84,17 @@ WE_mem_tb = 1;
 
 #50 
 WE_mem_tb = 0;
+OFFSET_tb = 0;
+
+//4. LOAD no registrador ( ld x30,20(x0) )
+
+#50
+Rw_tb = 30;
+Ra_tb = 30;
+
+OFFSET_tb = 20;
+WE_reg_tb = 1;
+
 
 end
 
