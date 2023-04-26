@@ -1,0 +1,40 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_0000029f178627f0 .scope module, "DEMUX" "DEMUX" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 64 "a";
+    .port_info 1 /INPUT 1 "select";
+    .port_info 2 /OUTPUT 64 "result0";
+    .port_info 3 /OUTPUT 64 "result1";
+o0000029f17897128 .functor BUFZ 1, C4<z>; HiZ drive
+L_0000029f178dfff8 .functor BUFT 1, C4<1>, C4<0>, C4<0>, C4<0>;
+L_0000029f1784acd0 .functor XNOR 1, o0000029f17897128, L_0000029f178dfff8, C4<0>, C4<0>;
+L_0000029f178e0088 .functor BUFT 1, C4<1>, C4<0>, C4<0>, C4<0>;
+L_0000029f1784e420 .functor XNOR 1, o0000029f17897128, L_0000029f178e0088, C4<0>, C4<0>;
+v0000029f17862fa0_0 .net/2u *"_ivl_0", 0 0, L_0000029f178dfff8;  1 drivers
+v0000029f178631c0_0 .net *"_ivl_10", 0 0, L_0000029f1784e420;  1 drivers
+L_0000029f178e00d0 .functor BUFT 1, C4<0000000000000000000000000000000000000000000000000000000000000000>, C4<0>, C4<0>, C4<0>;
+v0000029f1784ac30_0 .net/2u *"_ivl_12", 63 0, L_0000029f178e00d0;  1 drivers
+v0000029f17862980_0 .net *"_ivl_2", 0 0, L_0000029f1784acd0;  1 drivers
+L_0000029f178e0040 .functor BUFT 1, C4<0000000000000000000000000000000000000000000000000000000000000000>, C4<0>, C4<0>, C4<0>;
+v0000029f17862a20_0 .net/2u *"_ivl_4", 63 0, L_0000029f178e0040;  1 drivers
+v0000029f17862ac0_0 .net/2u *"_ivl_8", 0 0, L_0000029f178e0088;  1 drivers
+o0000029f17897098 .functor BUFZ 64, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v0000029f17862b60_0 .net "a", 63 0, o0000029f17897098;  0 drivers
+v0000029f1784e2e0_0 .net "result0", 63 0, L_0000029f17891290;  1 drivers
+v0000029f1784e380_0 .net "result1", 63 0, L_0000029f17891010;  1 drivers
+v0000029f17890bb0_0 .net "select", 0 0, o0000029f17897128;  0 drivers
+L_0000029f17891290 .functor MUXZ 64, L_0000029f178e0040, o0000029f17897098, L_0000029f1784acd0, C4<>;
+L_0000029f17891010 .functor MUXZ 64, o0000029f17897098, L_0000029f178e00d0, L_0000029f1784e420, C4<>;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    ".\DEMUX.v";
