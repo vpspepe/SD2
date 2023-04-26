@@ -1,4 +1,4 @@
-module loadstore_FD(
+module FD(
     input[4:0] Ra,   //guarda endereço de acesso ao banco de registradores
     input[4:0] Rb,   //guarda endereço de acesso da memória (constante e igual a 0)
     input[4:0] Rw,  
@@ -7,7 +7,7 @@ module loadstore_FD(
     output [63:0] doutB, //valor de leitura do Rb
     output [63:0] doutMem,
     input clk,
-    input [4:0] OFFSET
+    input [63:0] OFFSET,
     input OP_MEM,
     input ADD_SUB
 );

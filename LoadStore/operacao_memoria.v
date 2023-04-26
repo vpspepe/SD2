@@ -1,7 +1,7 @@
 module operacao_memoria(
     input [63:0] dinA,
     input [63:0] dinB,
-    input [4:0] OFFSET,
+    input [63:0] OFFSET,
     input OP_MEM,
     input clk,
     input ADD_SUB,
