@@ -14,10 +14,10 @@ ULA UUT(
 initial begin
     
 
-    $monitor("a = %d ||  b= %d  || soma_sub = %d || result = %d", a_tb, b_tb, soma_sub_tb, result_tb);
+    $monitor("a = %d ||  b= %d  || soma_sub = %d || result = %b", a_tb, b_tb, soma_sub_tb, result_tb);
 
-    a_tb = 15;
-    b_tb = 12;
+    a_tb = 3;
+    b_tb = 2;
     soma_sub_tb = 0;
 
     #30

@@ -11,7 +11,8 @@ wire [63:0] doutB_tb;       //valor de leitura do Rb
 wire [63:0] doutMem_tb;     //valor de saída da memória e entrada do Banco de Registradores
 reg clk_tb;
 reg [63:0] OFFSET_tb; 
-reg ADD_SUB_tb, OP_MEM_tb;      
+reg ADD_SUB_tb;
+reg [1:0] OP_MEM_I_tb;      
 
 
 FD uut(
@@ -26,7 +27,7 @@ FD uut(
     .clk(clk_tb),
     .OFFSET(OFFSET_tb),
     .ADD_SUB(ADD_SUB_tb),
-    .OP_MEM(OP_MEM_tb)
+    .OP_MEM_I(OP_MEM_I_tb)
 );
 
 
@@ -47,7 +48,7 @@ initial begin
     OFFSET_tb,
     Rb_tb,
     Rw_tb,
-    OP_MEM_tb,
+    OP_MEM_I_tb,
     ADD_SUB_tb,
     WE_reg_tb,
     WE_mem_tb,
@@ -67,7 +68,7 @@ Rw_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 0;
 ADD_SUB_tb = 0;
-OP_MEM_tb = 1; 
+OP_MEM_I_tb = 1; 
 clk_tb = 1;
 
 //1. INICIALIZANDO VALOR NA MEMORIA (linha 25 -> arquivo 'Memoria.v')
@@ -77,14 +78,14 @@ clk_tb = 1;
 //ld x1,1(x0)
 #40
 
-OP_MEM_tb = 1;
+OP_MEM_I_tb = 1;
 OFFSET_tb = 1;
 Rw_tb = 1;
 WE_reg_tb = 1;
 Ra_tb = 1;
 
 #40
-OP_MEM_tb = 0;
+OP_MEM_I_tb = 0;
 OFFSET_tb = 0;
 Rw_tb = 0;
 WE_reg_tb = 0;
@@ -94,7 +95,7 @@ Ra_tb = 1;
 
 #40
 WE_reg_tb = 1;
-OP_MEM_tb = 1;
+OP_MEM_I_tb = 1;
 OFFSET_tb = 2;
 Rw_tb = 2;
 Ra_tb = 2;
@@ -111,7 +112,7 @@ WE_reg_tb = 1;
 Ra_tb = 2;
 Rb_tb = 1;
 Rw_tb = 3;
-OP_MEM_tb = 0;
+OP_MEM_I_tb = 0;
 ADD_SUB_tb = 0; //soma
 
 #40
@@ -119,7 +120,7 @@ WE_reg_tb = 0;
 Ra_tb = 3;
 Rb_tb = 0;
 Rw_tb = 0;
-OP_MEM_tb = 0;
+OP_MEM_I_tb = 0;
 ADD_SUB_tb = 0; //soma
 
 //4. Agora, Subtração do que está no reg[3] e no reg[1], guardando no reg[4] (30 - 10 = 20)
@@ -134,14 +135,14 @@ ADD_SUB_tb = 1;
 Rw_tb = 0;
 ADD_SUB_tb = 0;
 Ra_tb = 0;
-OP_MEM_tb = 0;
+OP_MEM_I_tb = 0;
 Rb_tb = 0;
 WE_reg_tb = 0;
 
 //5. Store do que está no reg[3] para a posição 3 da memória e do que está no reg[4] para a posição 4 da memória.
 
 #40 //store 1  
-OP_MEM_tb = 1;
+OP_MEM_I_tb = 1;
 Ra_tb = 3;
 OFFSET_tb = 3;
 WE_mem_tb = 1;
@@ -160,6 +161,31 @@ OFFSET_tb = 4;
 
 #40 
 WE_mem_tb = 0;
+Rw_tb = 0;
+ADD_SUB_tb = 0;
+Ra_tb = 0;
+Rb_tb = 0;
+
+//addi x9, #10(x4) -> addi Rw, #IMM(Ra)
+
+#40
+OP_MEM_I_tb = 2;
+OFFSET_tb = 13;
+Ra_tb = 4;
+Rw_tb = 9;
+WE_reg_tb = 1;
+ADD_SUB_tb = 1;
+
+
+#40 
+OP_MEM_I_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 0;
+Rw_tb = 0;
+ADD_SUB_tb = 0;
+Ra_tb = 9;
+Rb_tb = 0;
+
 
 end
 

@@ -24,9 +24,12 @@ module Memoria(
 
     
 initial begin    // INICIALIZACAO DOS VALORES NA MEMÓRIA PARA FACILITAR NA TESTBENCH
+    mem[0] = 0;
     mem[1] = 10;
     mem[2] = 20;
-    mem[15] = 100;
+    mem[3] = 30;
+    mem[4] = 40;
+    
 end
 
 

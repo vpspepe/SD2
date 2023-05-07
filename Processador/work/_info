@@ -1,0 +1,395 @@
+m255
+K4
+z2
+Z0 !s99 nomlopt
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+R0
+!s11f vlog 2021.2 2021.04, Apr 14 2021
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z1 dC:/Users/Marcelo/Desktop/Programas/SD2/Processador
+T_opt
+!s110 1683413381
+VEF7K>5M`BB4gT<L6^gaog2
+04 6 4 work ULA_TB fast 0
+=1-fcaa142b89a2-6456d985-9c-5cf0
+!s124 OEM10U2 
+Z2 o-quiet -auto_acc_if_foreign -work work
+Z3 tCvgOpt 0
+n@_opt
+Z4 OL;O;2021.2;73
+R1
+T_opt1
+!s110 1683416114
+VTd8E?Rh104Zz0aCAoVf_m3
+04 5 4 work FD_tb fast 0
+=1-fcaa142b89a2-6456e432-d-41e0
+!s124 OEM10U41 
+R2
+R3
+n@_opt1
+R4
+R1
+T_opt2
+!s110 1683427023
+Vh`14No6aCl@gNK:gOHIZO3
+04 17 4 work Instruction_FD_tb fast 0
+=1-fcaa142b89a2-64570ecf-1f2-c3c
+!s124 OEM10U44 
+R2
+R3
+n@_opt2
+R4
+vFD
+!s110 1683416110
+!i10b 1
+!s100 nZfzK[n=ZkME>=bmVQlBm1
+IN3IR`P9T^EGXem6DIEkRB3
+R1
+w1683415370
+8.\FD.v
+F.\FD.v
+!i122 28
+L0 1 61
+Z5 VDg1SIo80bB@j0V0VzS_@n1
+Z6 OL;L;2021.2;73
+r1
+!s85 0
+31
+!s108 1683416110.000000
+!s107 .\FD.v|
+!s90 .\FD.v|
+!i113 0
+Z7 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R3
+n@f@d
+vFD_tb
+!s110 1683416109
+!i10b 1
+!s100 jni@2LM9Qce_D;dUMnF]Y1
+IE^Oz2NVbkAIOUC^SJf9QU1
+R1
+w1683416105
+8.\FD_tb.v
+F.\FD_tb.v
+!i122 27
+L0 3 193
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683416109.000000
+!s107 .\FD_tb.v|
+!s90 .\FD_tb.v|
+!i113 0
+R7
+R3
+n@f@d_tb
+vInstruction_FD
+!s110 1683426601
+!i10b 1
+!s100 ejSQO075LQWJ[4mU^3Ka]2
+IYk;]N<`>QkZ`haOP4KWS[0
+R1
+w1683425015
+8.\Instruction_FD.v
+F.\Instruction_FD.v
+!i122 122
+L0 1 62
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683426601.000000
+!s107 .\Instruction_FD.v|
+!s90 .\Instruction_FD.v|
+!i113 0
+R7
+R3
+n@instruction_@f@d
+vInstruction_FD_tb
+!s110 1683427021
+!i10b 1
+!s100 bY4Rogm1l]m5UgT`Tme]b3
+I:@XO@dRO@;`>nNJ3Fm2l_2
+R1
+w1683427019
+8.\Instruction_FD_tb.v
+F.\Instruction_FD_tb.v
+!i122 130
+L0 3 173
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683427021.000000
+!s107 .\Instruction_FD_tb.v|
+!s90 .\Instruction_FD_tb.v|
+!i113 0
+R7
+R3
+n@instruction_@f@d_tb
+vMemInstruction
+!s110 1683424965
+!i10b 1
+!s100 InY_A=PK;mCz:hjVO2hR22
+IKa;W;4lNO[90c`@0<^bX`1
+R1
+w1683424561
+8.\MemInstruction.v
+F.\MemInstruction.v
+!i122 100
+L0 1 33
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683424965.000000
+!s107 .\MemInstruction.v|
+!s90 .\MemInstruction.v|
+!i113 0
+R7
+R3
+n@mem@instruction
+vMemoria
+!s110 1683415299
+!i10b 1
+!s100 2Kb>T>CIM3AcFJI<=X`aM1
+IE4fU5m@BAoMV@7U;IZbfN0
+R1
+Z8 w1683391238
+8.\Memoria.v
+F.\Memoria.v
+!i122 13
+L0 1 34
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683415299.000000
+!s107 .\Memoria.v|
+!s90 .\Memoria.v|
+!i113 0
+R7
+R3
+n@memoria
+vMUX4_64
+!s110 1683415134
+!i10b 1
+!s100 ]A6`hfJVbc34=<?eZP`Vf3
+IzE0Z6P?:O=1jg6f8aC@Cg3
+R1
+w1683403546
+8.\MUX4_64.v
+F.\MUX4_64.v
+!i122 7
+L0 1 8
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683415134.000000
+!s107 .\MUX4_64.v|
+!s90 .\MUX4_64.v|
+!i113 0
+R7
+R3
+n@m@u@x4_64
+voperacao_memoria
+!s110 1683415409
+!i10b 1
+!s100 5T9Rj^@R?OUFMSdhXcCJW1
+IF;Cb4<Rk4?l7RfAUC>mDa2
+R1
+w1683414950
+8.\operacao_memoria.v
+F.\operacao_memoria.v
+!i122 17
+L0 1 21
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683415409.000000
+!s107 .\operacao_memoria.v|
+!s90 .\operacao_memoria.v|
+!i113 0
+R7
+R3
+vReg_Banco
+!s110 1683419971
+!i10b 1
+!s100 @AU=>feiYXjeznmID^9Cm3
+IR_Pg9E4n^XG4Bn^PcN[?N0
+R1
+R8
+8.\Reg_Banco.v
+F.\Reg_Banco.v
+!i122 42
+L0 1 68
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683419971.000000
+!s107 .\Reg_Banco.v|
+!s90 .\Reg_Banco.v|
+!i113 0
+R7
+R3
+n@reg_@banco
+vReg_Banco_tb
+!s110 1683419805
+!i10b 1
+!s100 7VI?aYIXej8n97j7ES?DG0
+IAiF2YJ:ZIVVE^n:iSnRZE1
+R1
+R8
+8.\Reg_Banco_tb.v
+F.\Reg_Banco_tb.v
+!i122 34
+L0 3 76
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683419805.000000
+!s107 .\Reg_Banco_tb.v|
+!s90 .\Reg_Banco_tb.v|
+!i113 0
+R7
+R3
+n@reg_@banco_tb
+vRegNbits
+!s110 1683419967
+!i10b 1
+!s100 ibOPm<^XDOnEnnP1n8zJ40
+I^Ff4k@A8oSMn`]JdCl4f42
+R1
+w1683419953
+8.\RegNbits.v
+F.\RegNbits.v
+!i122 41
+L0 1 20
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683419967.000000
+!s107 .\RegNbits.v|
+!s90 .\RegNbits.v|
+!i113 0
+R7
+R3
+n@reg@nbits
+vULA
+!s110 1683413389
+!i10b 1
+!s100 4QbU>Qm3;8]9<Og8l[Hki1
+I<:]_<=4H5G@KkzXGzHJ<A3
+R1
+w1683409902
+8.\ULA.v
+F.\ULA.v
+!i122 4
+L0 1 11
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683413389.000000
+!s107 .\ULA.v|
+!s90 .\ULA.v|
+!i113 0
+R7
+R3
+n@u@l@a
+vULA_TB
+!s110 1683413395
+!i10b 1
+!s100 o3z]EmG[UOIW0I5:nW4LX1
+IP8:AKhB9<eUJ1Z22XBZOg1
+R1
+w1683412663
+8.\ULA_TB.v
+F.\ULA_TB.v
+!i122 5
+L0 1 27
+R5
+R6
+r1
+!s85 0
+31
+!s108 1683413395.000000
+!s107 .\ULA_TB.v|
+!s90 .\ULA_TB.v|
+!i113 0
+R7
+R3
+n@u@l@a_@t@b

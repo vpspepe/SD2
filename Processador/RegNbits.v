@@ -2,7 +2,7 @@ module RegNbits(x,
                 clk, load, 
                 x_out
 );
-parameter N = 64; //tamanho do registrador parametrizável
+parameter N = 32; //tamanho do registrador parametrizável
 
 input[N-1:0] x;   //entrada
 input clk, load;  
