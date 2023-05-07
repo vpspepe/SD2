@@ -38,7 +38,6 @@ operacao_memoria u2(
      .dinB(doutB),
      .OFFSET(OFFSET),
      .OP_MEM_I(OP_MEM_I),
-     .clk(clk),
      .ADD_SUB(ADD_SUB),
      .dout(ULA_OUT)
 );
@@ -52,7 +51,7 @@ Memoria u3(
 );
 
 
-MUX4_64 u4(.a(ULA_OUT),.b(regIN_memOUT),.c(ULA_OUT),.d(x),.select(OP_MEM_I),.result(Dw));
+MUX4_64 u4(.a(ULA_OUT),.b(regIN_memOUT),.c(ULA_OUT),.d(64'b0),.select(OP_MEM_I),.result(Dw));
 
 
 

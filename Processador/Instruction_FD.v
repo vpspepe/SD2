@@ -19,7 +19,7 @@ module Instruction_FD(
     wire [63:0] offset;
 
 
-    assign offset = instruction[6:0] == 7'b0110011 ? {instruction[31:25]} : instruction[31:20];
+    assign offset = instruction[6:0] == 7'b0110011 ? {5'b00000,instruction[31:25]} : instruction[31:20];
     assign Ra = instruction[19:15];
     assign Rb = instruction[6:0] == 7'b0110011 ? instruction [24:20] : 0;
     assign Rw = instruction[11:7];
