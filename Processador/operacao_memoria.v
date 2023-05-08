@@ -4,9 +4,9 @@ module operacao_memoria(
     input [63:0] OFFSET,
     input [1:0] OP_MEM_I,
     input ADD_SUB,
-    output [63:0] dout
+    output [63:0] dout,
     output [63:0] doutA, //valor de leitura do Registrador Ra
-    output [63:0] doutB, //valor de leitura do Rb
+    output [63:0] doutB //valor de leitura do Rb
 );
 
 wire [63:0] ULA_IN0,ULA_IN1; //saida da ULA para OPERAÇÃO e MEMORIA, respectivamente

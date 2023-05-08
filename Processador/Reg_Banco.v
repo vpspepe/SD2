@@ -16,7 +16,7 @@ module Reg_Banco(
 
     reg [31:0] loads;
 
- RegNbits Regs( //registrador x0 sempre tem o valor 0
+ Reg64 Regs( //registrador x0 sempre tem o valor 0
                 .x(64'b0),
                 .clk(clk), 
                 .load(1'b1), 
@@ -28,7 +28,7 @@ module Reg_Banco(
 
 for (i = 1; i < 32 ; i = i+1 ) begin
 
-    RegNbits Regs(
+    Reg64 Regs(
                 .x(dIN),  //todos os fios recebem dIN, o que vai diferenciar em qual reg vai salvar dIN é o LOAD
                 .clk(clk), 
                 .load(loads[i]), 

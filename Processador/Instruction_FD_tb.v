@@ -9,14 +9,12 @@ reg [1:0] OP_MEM_I_tb;
 reg ADD_SUB_tb;
 reg PC_load_tb;
 reg[31:0] PC_add_tb;
-wire [63:0] doutA_tb,doutB_tb;
-wire [63:0] doutMem_tb;
 wire [31:0] instruction_tb;
 wire [4:0] Ra_tb,Rb_tb,Rw_tb;
 wire [63:0] offset_tb;
 
 
-Instruction_FD uut(
+Instruction_FD instruction_fd(
     .clk(clk_tb), 
     .WE_mem(WE_mem_tb),
     .WE_reg(WE_reg_tb),
@@ -24,9 +22,6 @@ Instruction_FD uut(
     .ADD_SUB(ADD_SUB_tb),
     .PC_load(PC_load_tb),
     .PC_add(PC_add_tb),
-    .doutMem(doutMem_tb),
-    .doutA(doutA_tb),
-    .doutB(doutB_tb),
     .instruction_out(instruction_tb),
     .Ra_out(Ra_tb),.Rb_out(Rb_tb),.Rw_out(Rw_tb),
     .offset_out(offset_tb)

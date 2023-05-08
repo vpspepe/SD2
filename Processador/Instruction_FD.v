@@ -6,7 +6,6 @@ module Instruction_FD(
     input ADD_SUB,
     input PC_load,
     input[31:0] PC_add,
-    output [63:0] doutMem,doutA,doutB,
     output [31:0] instruction_out,
     output [4:0] Ra_out,Rb_out,Rw_out,
     output [63:0] offset_out
@@ -31,28 +30,25 @@ module Instruction_FD(
     assign offset_out = offset;
     assign instruction_out = instruction;
     
-FD u2(
+FD FD(
     .Ra(Ra),   //guarda endereço de acesso ao banco de registradores
     .Rb(Rb),   //guarda endereço de acesso da memória (constante e igual a 0)
     .Rw(Rw),  
     .WE_reg(WE_reg), .WE_mem(WE_mem),       
-    .doutA(doutA),//valor de leitura do Registrador Ra
-    .doutB(doutB), //valor de leitura do Rb
-    .doutMem(doutMem),
     .clk(clk),
     .OFFSET(offset),
     .OP_MEM_I(OP_MEM_I),
     .ADD_SUB(ADD_SUB)
 );
 
-RegNbits PC(
+Reg32 PC(
     .clk(clk),
     .x(PC_add), 
     .load(PC_load),
     .x_out(add_instruction)
 );
 
-MemInstruction uut_mem_instruction(
+MemInstruction mem_instruction(
     .instruction(add_instruction),
     .dout(instruction)
 );

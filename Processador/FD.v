@@ -22,7 +22,7 @@ wire [63:0] Dw;                         // valor que entra para ser escrito no b
 assign doutMem = regIN_memOUT;
 assign final_address = ULA_OUT;
 
-Reg_Banco u1(
+Reg_Banco RegFile(
             .Ra(Ra),
             .Rb(Rb),
             .Rw(Rw),
@@ -33,7 +33,7 @@ Reg_Banco u1(
             .clk(clk)
 );
 
-operacao_memoria u2(
+operacao_memoria Operacao_memoria(
      .dinA(doutA),
      .dinB(doutB),
      .OFFSET(OFFSET),
@@ -42,7 +42,7 @@ operacao_memoria u2(
      .dout(ULA_OUT)
 );
 
-Memoria u3( 
+Memoria Memoria( 
      .final_address(final_address[4:0]),
      .WE_mem(WE_mem),
      .dIN(doutA),
@@ -51,7 +51,7 @@ Memoria u3(
 );
 
 
-MUX4_64 u4(.a(ULA_OUT),.b(regIN_memOUT),.c(ULA_OUT),.d(64'b0),.select(OP_MEM_I),.result(Dw));
+MUX4_64 MUX4(.a(ULA_OUT),.b(regIN_memOUT),.c(ULA_OUT),.d(64'b0),.select(OP_MEM_I),.result(Dw));
 
 
 
