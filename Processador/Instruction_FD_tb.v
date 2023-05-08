@@ -91,7 +91,7 @@ ADD_SUB_tb = 0;
 
 #20
 PC_add_tb = 3;
-OP_MEM_I_tb = 1;
+OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
 ADD_SUB_tb = 0;
@@ -143,21 +143,6 @@ OP_MEM_I_tb = 1;
 WE_mem_tb = 1;
 WE_reg_tb = 0;
 ADD_SUB_tb = 0;
-
-
-#20
-PC_add_tb = 9;
-OP_MEM_I_tb = 1;
-WE_mem_tb = 0;
-WE_reg_tb = 0;
-ADD_SUB_tb = 0;
-
-
-#20
-PC_add_tb = 10;
-
-#20
-PC_add_tb = 11;
 
 end
 
