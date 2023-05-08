@@ -1,4 +1,4 @@
-module MUX(
+module MUX2_64(
             input a, b,       //0 1
             input select,
             output result);   // output 
