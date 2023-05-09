@@ -66,8 +66,11 @@ reset_tb = 0;
 //1. INICIALIZANDO VALOR NA MEMORIA (linha 25 -> arquivo 'Memoria.v')
 
 //2. LOADs no Banco de registradores ld x1,0(x0) e ld x2,1(x0)
-#10
+#30
 reset_tb = 1;
+
+#30
+reset_tb = 0;
 
 //ld x1,1(x0)
 #20
