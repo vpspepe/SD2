@@ -18,7 +18,7 @@ assign dout = ULA_OUT;
 
 MUX4_64 mux0(.a(dinA),.b(dinB),.c(dinA),.d(64'b0),.select(OP_MEM_I),.result(ULA_IN0));
 MUX4_64 mux1(.a(dinB),.b(OFFSET),.c(OFFSET),.d(64'b0),.select(OP_MEM_I),.result(ULA_IN1));
-ULA addsub(.a(ULA_IN0),.b(ULA_IN1),.soma_sub(ADD_SUB),.result(ULA_OUT), .flags(flags));
+ULA ULA(.a(ULA_IN0),.b(ULA_IN1),.soma_sub(ADD_SUB),.result(ULA_OUT), .flags(flags));
 
 
 endmodule

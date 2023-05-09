@@ -9,11 +9,11 @@ module FD(
     input clk,
     input [63:0] OFFSET,
     input [1:0] OP_MEM_I,  //=0 -> add/sub ; = 1 -> LOAD/STORE;  = 2 -> ADDI/SUBI
-    input ADD_SUB
+    input ADD_SUB,
+    output [5:0] flags     //controlam a operação de JUMP no adder de endereço
 );
 
-
-
+                     
 wire [63:0] final_address;              // endereco que entra na memoria
 wire [63:0] ULA_OUT;                    // fio que sai da ULA
 wire [63:0] regIN_memOUT;               // fio que sai da memoria
@@ -39,7 +39,8 @@ operacao_memoria Operacao_memoria(
      .OFFSET(OFFSET),
      .OP_MEM_I(OP_MEM_I),
      .ADD_SUB(ADD_SUB),
-     .dout(ULA_OUT)
+     .dout(ULA_OUT),
+     .flags(flags)
 );
 
 Memoria Memoria( 
