@@ -136,7 +136,7 @@ ADD_SUB_tb = 0;
 
 //BEQ x3,x3 #2
 #20
-select_flags_tb = 1;
+select_flags_tb = 0;
 OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 0;
@@ -144,14 +144,13 @@ ADD_SUB_tb = 0;
 
 //add x5,x1,x2
 #20
-select_flags_tb = 7;
+select_flags_tb = 8;
 OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
 ADD_SUB_tb = 0;
 
 #100
-select_flags_tb = 0;
 OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 0;
@@ -170,6 +169,8 @@ end
 always #10
     clk_tb = ~clk_tb;
 
-
+/*
+iverilog .\Instruction_FD_tb.v .\Instruction_FD.v .\FD.v .\Memoria.v .\MemInstruction.v .\Reg_Banco.v .\Reg64.v .\Reg32.v .\ULA.v .\operacao_memoria.v .\MUX4_64.v .\MUX2_32.v .\MUX8_32.v .\adder.v
+*/
     
 endmodule

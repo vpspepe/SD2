@@ -18,14 +18,14 @@ module Instruction_FD(
     wire selected_flag;
     wire [5:0] flags;
 
-    //parameter RTYPE = 'b0110011 , ITYPE_ULA = 'b0010011, ITYPE_LOAD = 'b0000011, STYPE = 'b0010011, BTYPE = 'b1100011, JTYPE_REG = 'b1100111, JTYPE = 'b1101111, UTYPE = '0110111, UTYPE_ADD = 'b0010111; 
+    //parameter R_TYPE = 7'b0110011 , I_TYPE_ADD = 77'b0010011, I_TYPE_LOAD = 7'b0000011, S_TYPE = 7'b0010011, B_TYPE = 7'b1100011, JTYPE_REG = 7'b1100111, JTYPE = 7'b1101111, UTYPE = 7'0110111, UTYPE_ADD = 7'b0010111; 
     //OLHEM o instructionMEM para entender os valores. O type indica isso la.
-    assign imm = instruction[6:0] == 7'b0110011 ?
-        ((instruction[31]) ?
+    assign imm = instruction[6:0] == R_TYPE ?
+        ((instruction[31]) ?  //se o 1o bit for 1 ... se for 0 ...
             {5'b11111,instruction[31:25]} :
             {5'b00000,instruction[31:25]}) 
         : instruction[6:0] == 7'b1100011 ? 
-            {instruction[31:25],instruction[11:7]} : 
+            {5'b00000,instruction[31:25]} :   //era pra ser {instruction[31:25],instruction[11:7]} 
             instruction[31:20];
     assign Ra = instruction[19:15];
     assign Rb = (instruction[6:0] == 7'b0110011 | instruction[6:0] == 7'b1100011) ? instruction [24:20] : 5'b0;
