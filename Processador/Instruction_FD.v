@@ -4,7 +4,7 @@ module Instruction_FD(
     input WE_reg,
     input [1:0] OP_MEM_I,
     input ADD_SUB,
-    input PC_load, IR_load
+    input PC_load, IR_load,
     input [2:0] select_flags,
     input reset
 );
