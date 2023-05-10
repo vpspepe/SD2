@@ -61,16 +61,16 @@ ADD_SUB_tb = 0;
 OP_MEM_I_tb = 0;
 clk_tb = 1;
 PC_load_tb = 1;
-reset_tb = 0;
+reset_tb = 1;
 
 //1. INICIALIZANDO VALOR NA MEMORIA (linha 25 -> arquivo 'Memoria.v')
 
 //2. LOADs no Banco de registradores ld x1,0(x0) e ld x2,1(x0)
-#10
-reset_tb = 1;
+#15
+reset_tb = 0;
 
 //ld x1,1(x0)
-#20
+#5
 OP_MEM_I_tb = 1;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
@@ -136,7 +136,7 @@ ADD_SUB_tb = 0;
 
 //BEQ x3,x3 #2
 #20
-select_flags_tb = 1;
+select_flags_tb = 0;
 OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 0;
@@ -144,17 +144,33 @@ ADD_SUB_tb = 0;
 
 //add x5,x1,x2
 #20
-select_flags_tb = 7;
+select_flags_tb = 8;
 OP_MEM_I_tb = 0;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
 ADD_SUB_tb = 0;
 
-end
+#100
+OP_MEM_I_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 0;
+ADD_SUB_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 0;
+ADD_SUB_tb = 0;
+OP_MEM_I_tb = 0;
+clk_tb = 0;
+PC_load_tb = 0;
+reset_tb = 1;
 
+$finish;
+
+end
 always #10
     clk_tb = ~clk_tb;
 
-
+/*
+iverilog .\Instruction_FD_tb.v .\Instruction_FD.v .\FD.v .\Memoria.v .\MemInstruction.v .\Reg_Banco.v .\Reg64.v .\Reg32.v .\ULA.v .\operacao_memoria.v .\MUX4_64.v .\MUX2_32.v .\MUX8_32.v .\adder.v
+*/
     
 endmodule

@@ -10,6 +10,7 @@ BLT = 2
 BGE = 3
 BLTU = 4
 BGEU = 5 
+default = 8
 */
 parameter BEQ = 0, BNE = 1, BLT = 2, BGE = 3, BLTU = 4, BGEU = 5 ;
 
@@ -28,7 +29,7 @@ always @(*)begin
         BGEU:  
             flag <= flags[BGEU];
         
-        default: flag <= 0;
+        default: flag <= 8;
     endcase
 end
 

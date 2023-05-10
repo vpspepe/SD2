@@ -18,11 +18,18 @@ module Instruction_FD(
     wire selected_flag;
     wire [5:0] flags;
 
+    //parameter R_TYPE = 7'b0110011 , I_TYPE_ADD = 77'b0010011, I_TYPE_LOAD = 7'b0000011, S_TYPE = 7'b0010011, B_TYPE = 7'b1100011, JTYPE_REG = 7'b1100111, JTYPE = 7'b1101111, UTYPE = 7'0110111, UTYPE_ADD = 7'b0010111; 
     //OLHEM o instructionMEM para entender os valores. O type indica isso la.
-    assign imm = instruction[6:0] == 7'b0110011 ? {5'b00000,instruction[31:25]} : instruction[6:0] == 7'b1100011 ? {instruction[31:25],instruction[11:7]} : instruction[31:20];
+    assign imm = instruction[6:0] == 7'b0110011 ?
+        ((instruction[31]) ?  //se o 1o bit for 1 ... se for 0 ...
+            {5'b11111,instruction[31:25]} :
+            {5'b00000,instruction[31:25]}) 
+        : instruction[6:0] == 7'b1100011 ? 
+            {5'b00000,instruction[31:25]} :   //era pra ser {instruction[31:25],instruction[11:7]} 
+            instruction[31:20];
     assign Ra = instruction[19:15];
-    assign Rb = instruction[6:0] == 7'b0110011 | instruction[6:0] == 7'b1100011 ? instruction [24:20] : 0;
-    assign Rw = instruction[6:0] == 7'b0110011 ? 0 : instruction[11:7];
+    assign Rb = (instruction[6:0] == 7'b0110011 | instruction[6:0] == 7'b1100011) ? instruction [24:20] : 5'b0;
+    assign Rw = instruction[6:0] == 7'b1100011 ? 5'b0 : instruction[11:7];
     
 FD FD(
     .Ra(Ra),   //guarda endereço de acesso ao banco de registradores
@@ -45,14 +52,15 @@ Reg32 PC(
 );
 
 
-MemInstruction mem_instruction(
+MemInstruction mem_instruction( //ROM COM A MEMORIA DE INSTRUCOES
     .instruction(addr_instruction),
     .dout(instruction)
 );
 
+MUX8_32 MUX8(.flags(flags),.select(select_flags),.flag(selected_flag)); //
+
 MUX2_32 MUX2(.a(1),.b(imm[31:0]),.select(selected_flag),.result(imm_or_const));
 
-MUX8_32 MUX8(.flags(flags),.select(select_flags),.flag(selected_flag));
 
 adder add(.a(imm_or_const),.b(addr_instruction),.result(PC_addr));
 

@@ -4,6 +4,7 @@ module ULA(
             output[63:0] result,
             output[5:0] flags
 );
+
 parameter BEQ = 0, BNE = 1, BLT = 2, BGE = 3, BLTU = 4, BGEU = 5 ;
 assign result = soma_sub == 1'b1 ? (a-b): (a+b);
 
