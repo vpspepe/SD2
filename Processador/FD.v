@@ -1,7 +1,7 @@
 module FD(
     input[4:0] Ra,   //guarda endereço de acesso ao banco de registradores
     input[4:0] Rb,   //guarda endereço de acesso da memória (constante e igual a 0)
-    input[4:0] Rw,  
+    input[4:0] Rw,  //ENDERECO DO REG QUE RECEBE O LOAD
     input WE_reg, WE_mem,     
     output [63:0] doutA, //valor de leitura do Registrador Ra
     output [63:0] doutB, //valor de leitura do Rb

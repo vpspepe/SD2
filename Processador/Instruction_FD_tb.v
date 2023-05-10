@@ -61,19 +61,16 @@ ADD_SUB_tb = 0;
 OP_MEM_I_tb = 0;
 clk_tb = 1;
 PC_load_tb = 1;
-reset_tb = 0;
+reset_tb = 1;
 
 //1. INICIALIZANDO VALOR NA MEMORIA (linha 25 -> arquivo 'Memoria.v')
 
 //2. LOADs no Banco de registradores ld x1,0(x0) e ld x2,1(x0)
-#30
-reset_tb = 1;
-
-#30
+#15
 reset_tb = 0;
 
 //ld x1,1(x0)
-#20
+#5
 OP_MEM_I_tb = 1;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
@@ -153,8 +150,23 @@ WE_mem_tb = 0;
 WE_reg_tb = 1;
 ADD_SUB_tb = 0;
 
-end
+#100
+select_flags_tb = 0;
+OP_MEM_I_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 0;
+ADD_SUB_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 0;
+ADD_SUB_tb = 0;
+OP_MEM_I_tb = 0;
+clk_tb = 0;
+PC_load_tb = 0;
+reset_tb = 1;
 
+$finish;
+
+end
 always #10
     clk_tb = ~clk_tb;
 

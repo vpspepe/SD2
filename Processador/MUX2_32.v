@@ -3,7 +3,7 @@ module MUX2_32(
             input select,
             output[31:0] result);   // output 
 
-assign result = select == 1'b1 ? b: a;
+assign result = select == 1'b1 ? b[31:0]: a[31:0];
 
 
 endmodule
