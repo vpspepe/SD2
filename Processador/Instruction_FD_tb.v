@@ -7,7 +7,7 @@ reg WE_mem_tb;
 reg WE_reg_tb;
 reg [1:0] OP_MEM_I_tb;
 reg ADD_SUB_tb;
-reg PC_load_tb;
+reg PC_load_tb, IR_load_tb;
 reg [2:0] select_flags_tb;
 reg reset_tb;
 
@@ -19,6 +19,7 @@ Instruction_FD instruction_fd(
     .OP_MEM_I(OP_MEM_I_tb),
     .ADD_SUB(ADD_SUB_tb),
     .PC_load(PC_load_tb),
+    .IR_load(IR_load_tb),
     .select_flags(select_flags_tb),
     .reset(reset_tb)
 );
@@ -61,6 +62,7 @@ ADD_SUB_tb = 0;
 OP_MEM_I_tb = 0;
 clk_tb = 1;
 PC_load_tb = 1;
+IR_load_tb = 1;
 reset_tb = 1;
 
 //1. INICIALIZANDO VALOR NA MEMORIA (linha 25 -> arquivo 'Memoria.v')
