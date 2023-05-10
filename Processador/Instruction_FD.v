@@ -58,7 +58,7 @@ MemInstruction mem_instruction( //ROM COM A MEMORIA DE INSTRUCOES
 );
 
 Reg32 InstructionRegister(
-    .clk(clk),
+    .clk(~clk),
     .x(instruction), 
     .load(IR_load),
     .x_out(instruction_IR_out),
