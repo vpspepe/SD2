@@ -72,7 +72,7 @@ reset_tb = 1;
 reset_tb = 0;
 
 //ld x1,1(x0)
-#5
+#15
 OP_MEM_I_tb = 1;
 WE_mem_tb = 0;
 WE_reg_tb = 1;
