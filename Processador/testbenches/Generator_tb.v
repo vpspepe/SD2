@@ -1,7 +1,7 @@
 module Generator_tb ();
     reg[31:0] instruction_tb;
     wire[31:0] immediate_tb;
-    wire[5:0] Ra_tb, Rb_tb, Rw_tb;
+    wire[4:0] Ra_tb, Rb_tb, Rw_tb;
 
     Generator uut(             //baseado no opcode, o bloco 'Generator' vai associar cada parte da instrucao a um endereço
     .opcode(instruction_tb[6:0]),
