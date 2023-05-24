@@ -1,9 +1,9 @@
-module MUX8_32_tb();
+module MUX8_1_tb();
 reg [5:0] flags_tb;
 reg [2:0] select_tb;
 wire flag_tb;
 
-MUX8_32 uut(.flags(flags_tb),.select(select_tb),.flag(flag_tb));
+MUX8_1 uut(.flags(flags_tb),.select(select_tb),.flag(flag_tb));
 
 initial begin
     $monitor("flags = %b | select = %d | flag = %d",flags_tb,select_tb,flag_tb);

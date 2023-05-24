@@ -1,4 +1,4 @@
-module MUX8_32(
+module MUX8_1(
     input [5:0] flags,
     input [2:0] select,
     output reg flag);
@@ -29,7 +29,7 @@ always @(*)begin
         BGEU:  
             flag <= flags[BGEU];
         
-        default: flag <= 8;
+        default: flag <= 8;  //mudar para 0
     endcase
 end
 

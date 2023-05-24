@@ -1,0 +1,124 @@
+$date
+	Tue May 23 21:46:25 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module Generator_tb $end
+$var wire 32 ! immediate_tb [31:0] $end
+$var wire 6 " Rw_tb [5:0] $end
+$var wire 6 # Rb_tb [5:0] $end
+$var wire 6 $ Ra_tb [5:0] $end
+$var reg 32 % instruction_tb [31:0] $end
+$scope module uut $end
+$var wire 32 & instruction [31:0] $end
+$var wire 7 ' opcode [6:0] $end
+$var reg 6 ( Ra [5:0] $end
+$var reg 6 ) Rb [5:0] $end
+$var reg 6 * Rw [5:0] $end
+$var reg 32 + immediate [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx +
+bx *
+bx )
+bx (
+bx '
+bx &
+bx %
+bx $
+bx #
+bx "
+bx !
+$end
+#10
+b1 "
+b1 *
+b0 $
+b0 (
+b0xxxxx #
+b0xxxxx )
+b1 !
+b1 +
+b11 '
+b100000001000010000011 %
+b100000001000010000011 &
+#30
+b10 #
+b10 )
+b11 "
+b11 *
+b1 $
+b1 (
+bx !
+bx +
+b110011 '
+b1000001000000110110011 %
+b1000001000000110110011 &
+#40
+b101 "
+b101 *
+b1000001000001010110011 %
+b1000001000001010110011 &
+#50
+b1000 !
+b1000 +
+b0xxxxx "
+b0xxxxx *
+b11 $
+b11 (
+b11 #
+b11 )
+b1100011 '
+b1100011000010001100011 %
+b1100011000010001100011 &
+#60
+b1011 "
+b1011 *
+b0xxxxx $
+b0xxxxx (
+b0xxxxx #
+b0xxxxx )
+b100 !
+b100 +
+b1101111 '
+b10000000000010111101111 %
+b10000000000010111101111 &
+#70
+b100 $
+b100 (
+b0 #
+b0 )
+b0xxxxx "
+b0xxxxx *
+b100 !
+b100 +
+b100011 '
+b100010001000100011 %
+b100010001000100011 &
+#80
+b1010 "
+b1010 *
+b0xxxxx #
+b0xxxxx )
+b0xxxxx $
+b0xxxxx (
+b1000000000000 !
+b1000000000000 +
+b10111 '
+b1010100010111 %
+b1010100010111 &
+#90
+b0 "
+b0 *
+b0 !
+b0 +
+b0 '
+b0 %
+b0 &
