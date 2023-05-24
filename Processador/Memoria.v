@@ -29,6 +29,7 @@ initial begin    // INICIALIZACAO DOS VALORES NA MEMÓRIA PARA FACILITAR NA TEST
     mem[2] = 20;
     mem[3] = 30;
     mem[4] = 40;
+    mem[5] = -10;
     
 end
 

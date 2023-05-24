@@ -184,6 +184,27 @@ JALR_tb = 1;
 AUIPC_tb = 0;
 
 
+
+#20 //load x6, #5(x0) x6 = -10
+OP_MEM_I_tb = 1;
+WE_mem_tb = 0;
+WE_reg_tb = 1;
+ADD_SUB_tb = 0;
+JALR_tb = 0;
+
+#20 //x7 = x1 + x6 
+OP_MEM_I_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 1;
+ADD_SUB_tb = 0;
+ //soma
+
+#20 //sub x8,x2 x1 (x8=10)
+OP_MEM_I_tb = 0;
+WE_mem_tb = 0;
+WE_reg_tb = 1;
+ADD_SUB_tb = 1;//sub
+
 //auipc x10, #4096  regfile[10] = PC + 4096 [mem60]
 #20 
 select_flags_tb = 8;
@@ -194,8 +215,6 @@ ADD_SUB_tb = 0;
 JAL_tb = 0;
 JALR_tb = 0;
 AUIPC_tb = 1;
-
-
 #20
 reset_tb = 1;
 
