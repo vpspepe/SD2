@@ -53,7 +53,7 @@
     - Sempre que ativamos um load, temos que lembrar de desativá-lo após o uso. Por exemplo, se faço load da mem[1] no reg[2], então load[2] = 1. No entanto, se faço, logo depois load da mem 2 no reg 3, o load[2] ainda está ativo, o que faz com que tanto o reg[3] quanto o reg[2] recebam o valor da mem 2.
     
 ### 7. ATUALIZAÇÃO MAIS RECENTE
-    - Ajustar always na UC -> assíncrono passagem de estado;
+    - Ajustar always na UC -> assíncrono passagem de estado; -> tirar posedge do reset pois é assincrono;
     - Ajustar o STORE;
     - Fazer BRANCH, AUIPC, JAL, JALR;
     - Ajustar estado de reset (state so deve receber o fetch - não inicializar as coisa)
