@@ -1,12 +1,14 @@
 module Generator(              //baseado no opcode, o bloco 'Generator' vai associar cada parte da instrucao a um endereço
     input [6:0] opcode,
     input [31:0] instruction,
-    output reg[31:0] immediate,
-    output reg[4:0] Ra, 
-    output reg[4:0] Rb,
-    output reg[4:0] Rw
+    output reg [31:0] immediate,
+    output reg [4:0] Ra, 
+    output reg [4:0] Rb,
+    output reg [4:0] Rw,
+    output reg [2:0] funct3,
+    output reg [6:0] funct7
 );
-    
+
     always @(*) begin
     case(opcode)
 
@@ -16,6 +18,8 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             Ra <= instruction[19:15];
             Rw <= instruction[11:7];
             immediate <= 32'bx;
+            funct3 <= instruction[14:12];
+            funct7 <= instruction[31:25];
         end
 
         7'b0000011: begin   //I-TYPE LOAD 
@@ -23,6 +27,7 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             Rb <= instruction[19:15];
             Ra <= 5'bx;
             Rw <= instruction[11:7];
+            funct3 <= instruction[14:12];
         end
         
         7'b0010011: begin   //I-TYPE ADDI 
@@ -30,6 +35,7 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             Rb <= 5'bx;
             Ra <= instruction[19:15];
             Rw <= instruction[11:7];
+            funct3 <= instruction[14:12];
         end
         
         7'b1100111: begin    //I-type JALR
@@ -37,6 +43,7 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             Rb <= 5'bx;
             Ra <= instruction[19:15];
             Rw <= instruction[11:7];
+            funct3 <= instruction[14:12];
         end
 
         7'b1100011: begin //B-type 
@@ -44,13 +51,14 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             Rb <= instruction[24:20];
             Ra <= instruction[19:15];
             Rw <= 5'bx;
+            funct3 <= instruction[14:12];
         end
 
         7'b0100011: begin //S-type STORE
             immediate <= {20'b00000000000000000000,instruction[31:25],instruction[11:7]};
             Rb <= instruction[24:20];
             Ra <= instruction[19:15];
-            //funct3 -> instruction[14:12];
+            funct3 <= instruction[14:12];
             Rw <= 5'bx;
         end
 
