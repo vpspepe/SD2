@@ -1,5 +1,5 @@
 module data_memory( 
-    input [4:0] address,  //guarda endereço que é a soma de doutB + OFFSET
+    input [63:0] address,  //guarda endereço que é a soma de doutB + OFFSET
     input WE_mem,
     input clk,
     input [63:0]dIN,            //Valor que entra na memória

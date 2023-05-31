@@ -16,7 +16,7 @@ module Processador(
     // FD -> UC
         wire [6:0] opcode;
     // FD -> Memoria
-        wire [4:0] address;
+        wire [63:0] address;
         wire [63:0] dout_FD;
         wire [31:0] PC;
     //
@@ -40,7 +40,7 @@ UC UnitControl(
     .IR_load(IR_load),
     .OP_MEM_I(OP_MEM_I),
     .select_JAL(JAL),
-    .select_JALR(JAL)
+    .select_JALR(JALR)
 ); 
 
 
@@ -68,7 +68,7 @@ Processador_FD FD(
     .opcode(opcode), //opcode enviado para UC
     .addr_RAM(address), //endereco enviado para a memoria RAM
     .data_RAM(dout_FD), //dados enviados a memoria RAM
-    .addr_instruction(PC) //endereco enviado para a memoria de instrucoes
+    .PC(PC) //endereco enviado para a memoria de instrucoes
 
 );
 

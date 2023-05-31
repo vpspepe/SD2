@@ -7,7 +7,7 @@ module ULA_control (
     output reg [3:0] op
 );
 
-parameter Rtype = 2'b10;
+parameter Rtype = 2'b10, Itype = 2'b00;
 parameter add = 4'b0010, sub = 4'b0110;
 
 always @(*) begin
@@ -19,6 +19,10 @@ always @(*) begin
         if(funct7 == 7'b0100000 & funct3 == 3'b000) begin
             op <= sub;
         end
+    end
+
+    if(Itype == ULAop) begin
+            op <= add;
     end
 
 end

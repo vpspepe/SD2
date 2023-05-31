@@ -1,7 +1,7 @@
 module Memoria(
     input [63:0] dIn,
     input [31:0] PC,
-    input [4:0] address,
+    input [63:0] address,
     input WE,
     input clk,
     output [31:0] instruction,

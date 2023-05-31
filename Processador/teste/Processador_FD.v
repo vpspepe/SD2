@@ -9,13 +9,14 @@ module Processador_FD(
     input  [63:0] Data, //dado que vem da memória(load), ula (add/addi/sub) ou do pc (jal)
     input  [1:0] ULAop,
     output [6:0] opcode, //opcode enviado para UC
-    output [4:0] addr_RAM, //endereco enviado para a memoria RAM
+    output [63:0] addr_RAM, //endereco enviado para a memoria RAM
     output [63:0] data_RAM, //dados enviados a memoria RAM
-    output [31:0] addr_instruction //endereco enviado para a memoria de instrucoes
+    output [31:0] PC //endereco enviado para a memoria de instrucoes
 );
 
+wire [31:0] addr_instruction;
 wire [31:0] PC_addr; //endereco que entra no PC
-wire [31:0] instruction, instruction_IR_out; //entrada e saida do IR
+wire [31:0] instruction_IR_out; //entrada e saida do IR
 wire [6:0] funct7;
 wire [2:0] funct3;
 wire [4:0] Ra,Rb,Rw; //entradas do reg file e da ula
@@ -31,7 +32,9 @@ wire [5:0] flags;
 wire [2:0] select_flags; //ISSO N EXISTE ASSIM EH SO PRA TESTE
 
 assign OFFSET = imm[31] ? {32'b1,imm} : {32'b0,imm} ; // completa os demais bits com 1 ou 0 (- ou +)
-assign opcode = instruction[6:0];
+assign opcode = instruction_IR_out[6:0];
+assign PC = addr_instruction;
+assign addr_RAM = ULA_OUT;
 
 Generator instruction_organizor ( //organiza os valores com base na instrucao de 32 bits
     .opcode(instruction_IR_out[6:0]),
@@ -54,7 +57,7 @@ Reg32 PCreg( //PROGRAM COUNTER
 
 Reg32 IR( //INSTRUCTION_REGISTER
     .clk(clk_IR),
-    .x(instruction),
+    .x(instruction), 
     .load(IR_load),
     .x_out(instruction_IR_out),
     .reset(reset)
@@ -71,7 +74,7 @@ Reg_Banco RegFile( //REGISTER fILE QUE CONTEM O BANCO DE REGISTRADORES
     .clk(clk)
 );
 
-ULA_control ULA__control(
+ULA_control ULAcontrol(
     .funct7(funct7), 
     .funct3(funct3),
     .ULAop(ULAop),
@@ -80,7 +83,7 @@ ULA_control ULA__control(
     .op(op)
 );
 
-ULA_selector Seletor_ula( //seleciona o que entra na ULA principal
+ULA_selector ULA_seletor( //seleciona o que entra na ULA principal
     .dinA(doutA),
     .dinB(doutB),
     .OFFSET(OFFSET),
