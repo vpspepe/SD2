@@ -1,7 +1,7 @@
 module Processador_FD(
     input  clk,
     input  clk_IR, //clock do IR que usa sinal contrario do clk
-    input  RF_load, PC_load, IR_load, 
+    input  rf_we, PC_load, IR_load, 
     input  JAL, JALR, //sinais indicam se operacao eh de jump and link (reg)
     input  reset, //reseta o PC pra 0, como se fosse um boot
     input  [1:0] OP_MEM_I,
@@ -35,6 +35,8 @@ assign OFFSET = imm[31] ? {32'b1,imm} : {32'b0,imm} ; // completa os demais bits
 assign opcode = instruction_IR_out[6:0];
 assign PC = addr_instruction;
 assign addr_RAM = ULA_OUT;
+assign data_RAM = doutA;
+
 
 Generator instruction_organizor ( //organiza os valores com base na instrucao de 32 bits
     .opcode(instruction_IR_out[6:0]),
@@ -54,6 +56,8 @@ Reg32 PCreg( //PROGRAM COUNTER
     .x_out(addr_instruction),
     .reset(reset)
 );
+ // se o sinal da ula (pc_src) for 1, faz PC+IMM na entrada do PC. Se nao faz PC + 4
+assign x = pc_src ? (addr_instruction + OFFSET) : (addr_instruction + 4);
 
 Reg32 IR( //INSTRUCTION_REGISTER
     .clk(clk_IR),
@@ -67,7 +71,7 @@ Reg_Banco RegFile( //REGISTER fILE QUE CONTEM O BANCO DE REGISTRADORES
     .Ra(Ra),
     .Rb(Rb),
     .Rw(Rw),
-    .WE_Reg(RF_load),
+    .WE_Reg(rf_we),
     .dIN(RF_input),
     .doutA(doutA),
     .doutB(doutB),
