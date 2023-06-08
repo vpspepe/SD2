@@ -5,7 +5,7 @@ module uc (
     output reg d_mem_we, //writeEnable
     output reg rf_we, 
     //output reg [1:0] ULAop,
-    output [3:0] alu_cmd,  
+    output reg[3:0] alu_cmd,  
     // selects
     output reg alu_src, pc_src, rf_src
 ); 
@@ -34,12 +34,13 @@ always @(posedge clk or posedge rst_n) begin
     if (rst_n == 1)
     begin
         alu_src <= 0;
+        pc_src <= 0;
+        rf_src <= 0;
         // select_JAL <= 0;
         // select_JALR <= 0;
         // selects
         d_mem_we <= 0;
         rf_we <= 0;
-        ULAop <= 2'b00;
         state <= fetch;
     end
 
@@ -125,6 +126,8 @@ always @(state) begin
         alu_src <= 0;
         pc_src <= 0;
         rf_src <= 0;
+        rf_we <= 1'b1;
+        d_mem_we <= 1'b0;
         // selects
         alu_cmd = 4'b0000;
     end
@@ -132,7 +135,8 @@ always @(state) begin
         alu_src <= 1;
         rf_src <= 1;
         pc_src <= 0;
-
+        d_mem_we <= 1'b0;
+        rf_we <= 1'b1;
         // selects
         alu_cmd = 4'b0001;  
     end
@@ -149,6 +153,7 @@ always @(state) begin
         rf_src <= 0;
         // selects
         alu_cmd = 4'b0010;  
+        d_mem_we <= 1'b1;
     end
     executeBtypeBRANCH: begin 
         alu_src <= 0;
@@ -166,14 +171,14 @@ always @(state) begin
     //     // selects
     //     PC_load <= 1;
     // end
-    executeJtypeJAL: begin
-        alu_src <= 1;
-        select_JAL <= 1;
-        select_JALR <= 0;
-        // selects
-        PC_load <= 1;
-        alu_cmd <= 4'b0101;
-    end
+    // executeJtypeJAL: begin
+    //     alu_src <= 1;
+    //     select_JAL <= 1;
+    //     select_JALR <= 0;
+    //     // selects
+    //     PC_load <= 1;
+    //     alu_cmd <= 4'b0101;
+    // end
     // executeUtypeAUIPC: begin
     //     alu_src <= 3;
     //     select_JAL <= 0;

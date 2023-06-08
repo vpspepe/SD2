@@ -14,6 +14,7 @@ module polirv
 
 wire clk_atrasado;
 
+atrasa_clk_3x1 atrasa_clk(.clk(clk),.clk_out(clk_atrasado));
 
 
 //UC:

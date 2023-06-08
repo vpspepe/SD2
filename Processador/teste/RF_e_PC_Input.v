@@ -5,7 +5,6 @@ module RF_e_PC_Input(
     input[31:0] addr_instruction32, imm32, //endereco de 32bits que SAI do PC
     input[63:0] ULA_OUT, Data, //saida da ULA pricnipal, 
     input[1:0] select_RF,
-    input
     output[31:0] PC_addr32,
     output[63:0] RF_input
 );

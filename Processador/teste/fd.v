@@ -1,29 +1,30 @@
 module fd(
     input  clk,
-    input  rf_we, d_mem_we,
+    input  rf_we, d_mem_we, pc_src, rf_src, alu_src,
     input  rst_n, //rst_na o PC pra 0, como se fosse um boot
     input  [3:0] alu_cmd,
     output [6:0] opcode, //opcode enviado para UC
     output [5:0] d_mem_addr, //endereco enviado para a memoria RAM
     inout [63:0] d_mem_data, //dados enviados a memoria RAM
-    output [5:0] i_mem_addr //endereco enviado para a memoria de instrucoes
+    output [5:0] i_mem_addr, //endereco enviado para a memoria de instrucoes
     input  [31:0] i_mem_data, //intrucao que chegar da memoria de instrucoes
-    output [3:0] alu_flags,
+    output [3:0] alu_flags
 
 );
 
-wire [31:0] addr_instruction;
+wire [63:0] d_mem_data_in, d_mem_data_out; //entrada e saida da memoria ram
+wire [31:0] addr_instruction; //endereco da memoria que chega ate o memoria de instruoes
 wire [31:0] PC_addr; //endereco que entra no PC
-wire [31:0] instruction_IR_out; //entrada e saida do IR
+wire [31:0] instruction_IR_out; //entrada e saida do IR ( a instrucao)
 wire [6:0] funct7;
 wire [2:0] funct3;
 wire [4:0] Ra,Rb,Rw; //entradas do reg file e da ula
 wire [31:0] imm; //imediato
 wire [63:0] doutA; //saida do regfile (reg[Ra])
-wire [63:0] doutB; //saida do regfile (reg[Ra])
+wire [63:0] doutB; //saida do regfile (reg[Ra])s
 wire [63:0] RF_input; //entrada do Regfile   
-wire [63:0] OFFSET;
-wire [3:0] op;
+wire [63:0] OFFSET; //imediado com sinal ajsutado
+wire [3:0] op; //saida do ula control e indica o que deve ser feito na ula
 wire [63:0] ULA_OUT;
 wire [5:0] flags;
 wire [2:0] select_flags; //ISSO N EXISTE ASSIM EH SO PRA TESTE
@@ -49,19 +50,21 @@ Generator instruction_organizor ( //organiza os valores com base na instrucao de
 Reg32 PCreg( //PROGRAM COUNTER
     .clk(clk),
     .x(PC_addr), 
-    .load(1),
+    .load(1'b1),
     .x_out(addr_instruction),
-    .rst_n(rst_n)
+    .reset(rst_n)
 );
  // se o sinal da ula (pc_src) for 1, faz PC+IMM na entrada do PC. Se nao faz PC + 4
-assign x = pc_src ? (addr_instruction + OFFSET) : (addr_instruction + 4);
+assign x = pc_src ? 
+        (flags[0] ? (addr_instruction + OFFSET) : (addr_instruction + 4) ) 
+        :   (addr_instruction + 4);
 
 Reg32 IR( //INSTRUCTION_REGISTER
     .clk(~clk),
     .x(i_mem_data), 
-    .load(1),
+    .load(1'b1),
     .x_out(instruction_IR_out),
-    .rst_n(rst_n)
+    .reset(rst_n)
 );
 
 Reg_Banco RegFile( //REGISTER fILE QUE CONTEM O BANCO DE REGISTRADORES
@@ -75,9 +78,9 @@ Reg_Banco RegFile( //REGISTER fILE QUE CONTEM O BANCO DE REGISTRADORES
     .clk(clk)
 );
 
-assign dIN = rf_src ? d_mem_data : ULA_OUT
-
-assign d_mem_data = rf_src ? doutB : 64'bz;
+assign RF_input = rf_src ? d_mem_data_in : ULA_OUT;
+assign d_mem_data = d_mem_we ? d_mem_data_out : 64'bz;
+assign d_mem_data_in = d_mem_data;
 
 ULA_control ULAcontrol(
     .funct7(funct7), 
