@@ -25,7 +25,7 @@ module fd
         output [i_addr_bits-1:0] i_mem_addr,
         input  [31:0]            i_mem_data,
         output [d_addr_bits-1:0] d_mem_addr,
-        inout  [63:0]            d_mem_data
+        inout  [63:0] d_mem_data
 
     );
     // AluCmd     AluFlags

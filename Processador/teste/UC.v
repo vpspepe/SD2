@@ -1,4 +1,4 @@
-module UC (
+module uc (
     input [6:0] opcode,
     input clk, rst_n,
     input  [3:0] alu_flags,  
@@ -100,12 +100,12 @@ always @(posedge clk or posedge rst_n) begin
             executeUtypeAUIPC: begin
                 state <= write_backREG;
             end
-            write_backMEM: begin
-                state <= fetch;
-            end
-            write_backREG: begin
-                state <= fetch;
-            end
+            // write_backMEM: begin
+            //     state <= fetch;
+            // end
+            // write_backREG: begin
+            //     state <= fetch;
+            // end
         endcase
     end
 end
@@ -123,16 +123,17 @@ always @(state) begin
     end
     executeRtype: begin
         alu_src <= 0;
+        pc_src <= 0;
+        rf_src <= 0;
         // selects
-        ULAop <= 2'b10; // add ou sub
         alu_cmd = 4'b0000;
     end
     executeItypeLOAD: begin
         alu_src <= 1;
-        select_JAL <= 0;
-        select_JALR <= 0;
+        rf_src <= 1;
+        pc_src <= 0;
+
         // selects
-        ULAop <= 2'b00;
         alu_cmd = 4'b0001;  
     end
     // executeItypeADDI: begin
@@ -144,19 +145,18 @@ always @(state) begin
     // end
     executeStypeSTORE: begin
         alu_src <= 1;
-        select_JAL <= 0;
-        select_JALR <= 0;
+        pc_src <= 0;
+        rf_src <= 0;
         // selects
         alu_cmd = 4'b0010;  
-        ULAop <= 2'b00;
     end
     executeBtypeBRANCH: begin 
         alu_src <= 0;
-        select_JAL <= 0;
-        select_JALR <= 0;
+        pc_src <= 1;
+        rf_src <= 0;
+
         // selects
         // ULAop <= 2'b01;
-        PC_load <= 1;
         alu_cmd <= 4'b0011;
     end
     // executeItypeJALR: begin
@@ -167,7 +167,7 @@ always @(state) begin
     //     PC_load <= 1;
     // end
     executeJtypeJAL: begin
-        alu_src <= 3;
+        alu_src <= 1;
         select_JAL <= 1;
         select_JALR <= 0;
         // selects
@@ -182,14 +182,10 @@ always @(state) begin
     //     PC_load <= 0;
     // end
     write_backREG: begin
-        select_JAL <= 0;
-        select_JALR <= 0;
         // selects 
         rf_we <= 1;
     end
     write_backMEM: begin
-        select_JAL <= 0;
-        select_JALR <= 0;
         // selects
         d_mem_we <= 1;
         

@@ -5,8 +5,6 @@ module ULA_selector(
     input alu_src,
     input [3:0] op, // vem da ULA_control
     output [63:0] dout,
-    output [63:0] doutA, //valor de leitura do Registrador Ra
-    output [63:0] doutB, //valor de leitura do Rb
     output [5:0] flags
 );
 
