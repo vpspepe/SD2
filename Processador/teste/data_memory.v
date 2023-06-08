@@ -6,7 +6,7 @@ module data_memory(
     output [63:0] d_mem_data_out          //Valor que sai da memória
 );
 
-    /*!!*/reg [63:0] mem [5:0];
+    /*!!*/reg [63:0] mem [63:0];
 
     // atribuindo valores para memoria e load/store
 

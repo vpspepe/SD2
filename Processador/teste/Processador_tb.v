@@ -3,24 +3,24 @@
 module Processador_tb();
 
 reg clk_tb;
-reg reset_tb;
+reg rst_n_tb;
 
-Processador Proce(.reset(reset_tb),.clk(clk_tb));
+rv_e_mem rv(.rst_n(rst_n_tb),.clk(clk_tb));
 
 
 initial begin
-$dumpfile("_testbenches/vvp/waveforms5.vcd");
+$dumpfile("_testbenches/vvp/RV.vcd");
 $dumpvars(0, Processador_tb);
 
-reset_tb = 0;
+rst_n_tb = 0;
 clk_tb = 0;
 #10 
-reset_tb = 1;
+rst_n_tb = 1;
 
 #10 
-reset_tb = 0;
+rst_n_tb = 0;
  
-#500
+#800
 $finish;
 
 end

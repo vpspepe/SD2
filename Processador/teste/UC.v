@@ -160,9 +160,9 @@ always @(state) begin
         alu_src <= 0;
         pc_src <= 1;
         rf_src <= 0;
+        d_mem_we <=0;
 
         // selects
-        // ULAop <= 2'b01;
         alu_cmd <= 4'b0011;
     end
     // executeItypeJALR: begin

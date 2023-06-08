@@ -3,7 +3,7 @@ module instruction_memory(
     output [31:0] i_mem_data          //Valor que sai da memória
 );
 
-    /*!!*/reg [31:0] mem [5:0];
+    /*!!*/reg [31:0] mem [63:0];
 
     // atribuindo valores para memoria e load/store
 
