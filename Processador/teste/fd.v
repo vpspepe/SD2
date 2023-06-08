@@ -26,7 +26,7 @@ wire [63:0] RF_input; //entrada do Regfile
 wire [63:0] OFFSET; //imediado com sinal ajsutado
 wire [3:0] op; //saida do ula control e indica o que deve ser feito na ula
 wire [63:0] ULA_OUT;
-wire [5:0] flags;
+wire [3:0] flags;
 wire [2:0] select_flags; //ISSO N EXISTE ASSIM EH SO PRA TESTE
 
 assign OFFSET = imm[31] ? {32'b1,imm} : {32'b0,imm} ; // completa os demais bits com 1 ou 0 (- ou +)
@@ -99,6 +99,7 @@ ULA_selector ULA_seletor( //seleciona o que entra na ULA principal
     .flags(flags)
 );
 
+assign alu_flags = flags;
 
 // RF_e_PC_Input Inputs_rf_pc_controller(
 //     .flags(flags),

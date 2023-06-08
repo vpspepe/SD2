@@ -5,7 +5,7 @@ module ULA_selector(
     input alu_src,
     input [3:0] op, // vem da ULA_control
     output [63:0] dout,
-    output [5:0] flags
+    output [3:0] flags
 );
 
 wire [63:0] ULA_IN0,ULA_IN1; //saida da ULA para OPERAÇÃO e MEMORIA, respectivamente

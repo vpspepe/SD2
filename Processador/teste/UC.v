@@ -140,13 +140,16 @@ always @(state) begin
         // selects
         alu_cmd = 4'b0001;  
     end
-    // executeItypeADDI: begin
-    //     alu_src <= 2;
-    //     select_JAL <= 0;
-    //     select_JALR <= 0;
-    //     // selects
-    //     // ULAop <= 2'b01
-    // end
+     executeItypeADDI: begin
+         alu_src <= 1;
+         pc_src <= 1;
+         rf_src <= 0;
+         rf_we <= 1;
+         d_mem_we <= 1'b0;
+         // selects
+         alu_cmd <= 4'b0001;
+
+     end
     executeStypeSTORE: begin
         alu_src <= 1;
         pc_src <= 0;
