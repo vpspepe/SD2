@@ -78,29 +78,29 @@ always @(posedge clk or posedge rst_n) begin
                 endcase
             end
             executeRtype: begin
-                state <= write_backREG;
+                state <= fetch;
             end
             executeItypeLOAD: begin
-                state <= write_backREG;
+                state <= fetch;
             end
             executeItypeADDI: begin
-                state <= write_backREG;
+                state <= fetch;
             end
             executeStypeSTORE: begin
-                state <= write_backMEM;
+                state <= fetch;
             end
             executeBtypeBRANCH: begin
                 state <= fetch;
             end
-            executeItypeJALR: begin
-                state <= write_backREG;
-            end
-            executeJtypeJAL: begin
-                state <= write_backREG;
-            end
-            executeUtypeAUIPC: begin
-                state <= write_backREG;
-            end
+            // executeItypeJALR: begin
+            //     state <= fetch;
+            // end
+            // executeJtypeJAL: begin
+            //     state <= fetch;
+            // end
+            // executeUtypeAUIPC: begin
+            //     state <= fetch;
+            // end
             // write_backMEM: begin
             //     state <= fetch;
             // end
@@ -154,6 +154,7 @@ always @(state) begin
         // selects
         alu_cmd = 4'b0010;  
         d_mem_we <= 1'b1;
+        rf_we <= 1'b0;
     end
     executeBtypeBRANCH: begin 
         alu_src <= 0;
@@ -186,15 +187,14 @@ always @(state) begin
     //     // selects
     //     PC_load <= 0;
     // end
-    write_backREG: begin
-        // selects 
-        rf_we <= 1;
-    end
-    write_backMEM: begin
-        // selects
-        d_mem_we <= 1;
-        
-    end
+    // write_backREG: begin
+    //     // selects 
+    //     rf_we <= 1;
+    // end
+    // write_backMEM: begin
+    //     // selects
+    //     d_mem_we <= 1;  
+    //end
     endcase
 end
 endmodule

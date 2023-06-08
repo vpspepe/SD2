@@ -1,23 +1,23 @@
 module data_memory( 
-    input [63:0] address,  //guarda endereço que é a soma de doutB + OFFSET
-    input WE_mem,
+    input [5:0] d_mem_addr,  //guarda endereço que é a soma de doutA + OFFSET
+    input d_mem_we,
     input clk,
-    input [63:0]dIN,            //Valor que entra na memória
-    output [63:0] dout          //Valor que sai da memória
+    input [63:0]d_mem_data_in,            //Valor que entra na memória
+    output [63:0] d_mem_data_out          //Valor que sai da memória
 );
 
-    /*!!*/reg [63:0] mem [31:0];
+    /*!!*/reg [63:0] mem [5:0];
 
     // atribuindo valores para memoria e load/store
 
-    assign dout = mem[address];       //Leitura de dados no Memória (Load) 
+    assign d_mem_data_out = mem[d_mem_addr];       //Leitura de dados no Memória (Load) 
    
 
 
     always @(posedge clk) begin
                                     
-        if (WE_mem) begin                    
-            mem[address]  <= dIN;      //Escrita de dados na memória (Store)
+        if (d_mem_we) begin                    
+            mem[d_mem_addr]  <= d_mem_data_in;      //Escrita de dados na memória (Store)
         end
 
     end

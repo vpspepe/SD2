@@ -8,6 +8,10 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
     output reg [2:0] funct3,
     output reg [6:0] funct7
 );
+    //imm[12]       | Ra[5] |funct3[3] |       Rw[5]      | opcode[7] -> I-Type
+    //funct7[7] | Rb[5]    | Ra[5] |funct3[3] |       Rw[5]      | opcode[7] -> R-Type
+    //imm [bit12 + 10:5]   | Rb[5] | Ra[5] |funct3[3] | imm[4:1 + bit11] | opcode[7] -> B-type
+    //imm [11:5]   | Rb[5] | Ra[5] |funct3[3] | imm[4:0] | opcode[7] -> S-type
 
     always @(*) begin
     case(opcode)
@@ -24,8 +28,8 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
 
         7'b0000011: begin   //I-TYPE LOAD 
             immediate <= {20'b00000000000000000000,instruction[31:20]};
-            Rb <= instruction[19:15];
-            Ra <= 5'bx;
+            Ra <= instruction[19:15];
+            Rb <= 5'bx;
             Rw <= instruction[11:7];
             funct3 <= instruction[14:12];
         end

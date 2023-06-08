@@ -5,15 +5,21 @@ module atrasa_clk_3x1(
 
 reg[1:0] counter;
 reg out;
-assign clk_out = out;
+assign clk_out = (counter == 0) ? 1 : 0;
+
+initial begin
+    counter <= 2;
+end
 
 always @(posedge clk ) begin
-    if(counter == 2'b00) out <= 1;
-    else out <= 0;
-    if (counter == 2) counter <= 0;
-
-    counter <= counter + 1;
-    
+    if(counter == 2'b10)
+        counter <= 2'b0;
+    else
+        counter <= counter + 1;
+        
 end
+
+
+
 
 endmodule

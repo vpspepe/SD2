@@ -31,9 +31,9 @@ wire [2:0] select_flags; //ISSO N EXISTE ASSIM EH SO PRA TESTE
 
 assign OFFSET = imm[31] ? {32'b1,imm} : {32'b0,imm} ; // completa os demais bits com 1 ou 0 (- ou +)
 assign opcode = instruction_IR_out[6:0];
-assign i_mem_addr = addr_instruction;
-assign d_mem_addr = ULA_OUT;
-assign data_RAM = doutA;
+assign i_mem_addr = addr_instruction[7:2];
+assign d_mem_addr = ULA_OUT[7:2];
+assign d_mem_data_out = doutA;
 
 
 Generator instruction_organizor ( //organiza os valores com base na instrucao de 32 bits
@@ -54,7 +54,7 @@ Reg32 PCreg( //PROGRAM COUNTER
     .x_out(addr_instruction),
     .reset(rst_n)
 );
- // se o sinal da ula (pc_src) for 1, faz PC+IMM na entrada do PC. Se nao faz PC + 4
+ // se o sinal da ula (pc_src) for 1 E a flag BEQ for 1, faz PC+IMM na entrada do PC. Se nao faz PC + 4
 assign x = pc_src ? 
         (flags[0] ? (addr_instruction + OFFSET) : (addr_instruction + 4) ) 
         :   (addr_instruction + 4);
