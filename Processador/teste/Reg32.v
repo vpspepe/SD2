@@ -9,16 +9,16 @@ input[N-1:0] x;   //entrada
 input clk, load,reset;  
 output reg[N-1:0] x_out; //saída
 
-
-always @(posedge clk) begin
+always @(*) begin
     if (reset) begin
         x_out <= 0;
-    end
-    else begin
+end
+end
+
+always @(posedge clk) begin
         if (load) begin
             x_out <= x;
         end
-    end
 end
 
 endmodule
