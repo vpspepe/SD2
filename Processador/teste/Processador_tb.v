@@ -20,10 +20,10 @@ rst_n_tb = 1;
 #10 
 rst_n_tb = 0;
 
-#300
-rst_n_tb =1;
-#10
-rst_n_tb=0;
+// #300
+// rst_n_tb =1;
+// #10
+// rst_n_tb=0;
 #800
 $finish;
 

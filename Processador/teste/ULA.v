@@ -6,8 +6,11 @@ module ULA(
 );
 wire[63:0] ula_out;
 parameter BEQ = 0, MSB = 1, Overflow = 2;
+parameter SOMA = 4'b0010, SUB = 4'b0110, AND = 4'b0000, OR = 4'b0001;
 //parameter BNE = 1, BLT = 2, BGE = 3, BLTU = 4, BGEU = 5 ;
-assign ula_out = op == 4'b0110 ? (a-b): (a+b);
+assign ula_out = op == SUB ? (a-b):
+        (op == SOMA ? (a+b) :
+        (op == AND ? (a&b) : (a|b)));
 assign result = ula_out;
 
 assign flags[3] = 0;

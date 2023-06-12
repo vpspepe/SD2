@@ -97,7 +97,7 @@ module adder(
     assign result = a + b;
 endmodule
 
-module atrasa_clk_3x1(
+module atrasa_clk_3x1( //redutor de clock, ja que a datapath roda
     input clk,
     output clk_out
     );
@@ -327,7 +327,7 @@ endmodule
 module Reg32(x,
                 clk, load, 
                 x_out,reset
-    );
+            );
 
     parameter N = 32; //tamanho do registrador parametrizável
 
@@ -335,18 +335,16 @@ module Reg32(x,
     input clk, load,reset;  
     output reg[N-1:0] x_out; //saída
 
-    always @(*) begin
-        if (reset) begin
-            x_out <= 0;
-    end
+    always @(posedge reset) begin
+        x_out <= 0;
     end
 
     always @(posedge clk) begin
-        
-            if (load==1 & reset == 0) begin
+            if (load == 1 & reset == 0) begin
                 x_out <= x;
             end
     end
+
 endmodule
 
 module Reg64(x,
@@ -378,13 +376,18 @@ module ULA_control (
     );
 
     parameter Rtype = 4'b0000, Itype = 4'b0001, Stype = 4'b0010, Btype = 4'b0011 ;
-    parameter add = 4'b0010, sub = 4'b0110;
+    parameter add = 4'b0010, sub = 4'b0110, _and = 4'b0000, _or = 4'b0001;
 
     always @(*) begin
         
         if(Rtype == alu_cmd) begin
-            if(funct7 == 7'b0000000 & funct3 == 3'b000) begin
-                op <= add;
+            if(funct7 == 7'b0000000 ) begin
+                if(funct3 == 3'b000)
+                    op <= add;
+                else if(funct3 == 3'b111)
+                    op <= _and;
+                else if(funct3 == 3'b110)
+                    op <= _or;
             end
             if(funct7 == 7'b0100000 & funct3 == 3'b000) begin
                 op <= sub;
@@ -430,8 +433,11 @@ module ULA(
     );
     wire[63:0] ula_out;
     parameter BEQ = 0, MSB = 1, Overflow = 2;
+    parameter SOMA = 4'b0010, SUB = 4'b0110, AND = 4'b0000, OR = 4'b0001;
     //parameter BNE = 1, BLT = 2, BGE = 3, BLTU = 4, BGEU = 5 ;
-    assign ula_out = op == 4'b0110 ? (a-b): (a+b);
+    assign ula_out = op == SUB ? (a-b):
+            (op == SOMA ? (a+b) :
+            (op == AND ? (a&b) : (a|b)));
     assign result = ula_out;
 
     assign flags[3] = 0;
@@ -460,7 +466,7 @@ module fd_entrega(
     output [3:0] alu_flags
 
     );
-
+    wire clk_atrasado;
     wire [63:0] d_mem_data_in, d_mem_data_out; //entrada e saida da memoria ram
     wire [31:0] addr_instruction; //endereco da memoria que chega ate o memoria de instruoes
     wire [31:0] PC_addr; //endereco que entra no PC
@@ -484,6 +490,11 @@ module fd_entrega(
     assign d_mem_addr = ULA_OUT[5:0];
     assign d_mem_data_out = doutB;
 
+    atrasa_clk_3x1 redutor_de_clk(
+        .clk(clk),
+        .clk_out(clk_atrasado)
+    );
+
 
     Generator instruction_organizor ( //organiza os valores com base na instrucao de 32 bits
         .opcode(instruction_IR_out[6:0]),
@@ -497,7 +508,7 @@ module fd_entrega(
     );
 
     Reg32 PCreg( //PROGRAM COUNTER
-        .clk(clk),
+        .clk(clk_atrasado),
         .x(PC_addr), 
         .load(1'b1),
         .x_out(addr_instruction),
@@ -509,7 +520,7 @@ module fd_entrega(
             :   (addr_instruction + 4);
 
     Reg32 IR( //INSTRUCTION_REGISTER
-        .clk(~clk),
+        .clk(~clk_atrasado),
         .x(i_mem_data), 
         .load(1'b1),
         .x_out(instruction_IR_out),
@@ -524,7 +535,7 @@ module fd_entrega(
         .dIN(RF_input),
         .doutA(doutA),
         .doutB(doutB),
-        .clk(clk)
+        .clk(clk_atrasado)
     );
 
     assign RF_input = rf_src ? d_mem_data_in : ULA_OUT;
