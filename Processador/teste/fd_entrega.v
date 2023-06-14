@@ -8,6 +8,7 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
     output reg [2:0] funct3,
     output reg [6:0] funct7
     );
+
     //imm[12]       | Ra[5] |funct3[3] |       Rw[5]      | opcode[7] -> I-Type
     //funct7[7] | Rb[5]    | Ra[5] |funct3[3] |       Rw[5]      | opcode[7] -> R-Type
     //imm [bit12 + 10:5]   | Rb[5] | Ra[5] |funct3[3] | imm[4:1 + bit11] | opcode[7] -> B-type
@@ -51,7 +52,12 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
         end
 
         7'b1100011: begin //B-type 
+           if (instruction[31] == 1'b1) begin 
+            immediate <= {20'b11111111111111111111,instruction[31],instruction[7],instruction[30:25],instruction[11:8],1'b0};
+            end
+            else begin
             immediate <= {20'b00000000000000000000,instruction[31],instruction[7],instruction[30:25],instruction[11:8],1'b0};
+            end
             Rb <= instruction[24:20];
             Ra <= instruction[19:15];
             Rw <= 5'bx;
@@ -423,6 +429,7 @@ module ULA_selector(
 
 
     ULA ULA(.a(dinA),.b(ULA_IN1),.op(op),.result(ULA_OUT), .flags(flags));
+
 endmodule
 
 module ULA(
