@@ -159,9 +159,9 @@ always @(state) begin
         d_mem_we <= 1'b1;
         rf_we <= 1'b0;
     end
-    executeBtypeBRANCH: begin 
+    executeBtypeBRANCH: begin
+        pc_src <= alu_flags[0];        
         alu_src <= 0;
-        pc_src <= 1;
         rf_src <= 0;
         d_mem_we <=0;
 

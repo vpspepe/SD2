@@ -12,11 +12,6 @@ module polirv
     );
 
 
-wire clk_atrasado;
-
-atrasa_clk_3x1 atrasa_clk(.clk(clk),.clk_out(clk_atrasado));
-
-
 //UC:
     // UC -> FD
     wire [3:0] alu_cmd;
@@ -29,8 +24,8 @@ atrasa_clk_3x1 atrasa_clk(.clk(clk),.clk_out(clk_atrasado));
         wire [6:0] opcode;
         wire [3:0] alu_flags;
 
- fd_entrega FD(
-        .clk(clk_atrasado), .rst_n(rst_n),                  
+ FD_grupo21 FD(
+        .clk(clk), .rst_n(rst_n),                  
         .opcode(opcode),                    
         .d_mem_we(d_mem_we), .rf_we(rf_we),             
         .alu_cmd(alu_cmd),                

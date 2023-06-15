@@ -9,14 +9,12 @@ input[N-1:0] x;   //entrada
 input clk, load,reset;  
 output reg[N-1:0] x_out; //saída
 
-always @(*) begin
-    if (reset) begin
-        x_out <= 0;
-end
+always @(posedge reset) begin
+    x_out <= 0;
 end
 
 always @(posedge clk) begin
-        if (load) begin
+        if (load == 1 & reset == 0) begin
             x_out <= x;
         end
 end

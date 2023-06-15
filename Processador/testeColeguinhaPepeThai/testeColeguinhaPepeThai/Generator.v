@@ -50,8 +50,13 @@ module Generator(              //baseado no opcode, o bloco 'Generator' vai asso
             funct3 <= instruction[14:12];
         end
 
-        7'b1100011: begin //B-type 
+        7'b1100011: begin //B-type
+        if (instruction[31] == 1'b1) begin 
+            immediate <= {20'b11111111111111111111,instruction[31],instruction[7],instruction[30:25],instruction[11:8],1'b1};
+        end
+        else begin
             immediate <= {20'b00000000000000000000,instruction[31],instruction[7],instruction[30:25],instruction[11:8],1'b0};
+        end
             Rb <= instruction[24:20];
             Ra <= instruction[19:15];
             Rw <= 5'bx;

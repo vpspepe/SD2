@@ -1,4 +1,4 @@
-module fd_param
+module FD_grupo21 
     #(  // Tamanho em bits dos barramentos
         parameter i_addr_bits = 6,
         parameter d_addr_bits = 6
@@ -46,7 +46,7 @@ module fd_param
     parameter op_u = 7'b0010111;
     parameter op_j = 7'b1101111;
     parameter op_I = 7'b1100111;
-    parameter op_iLD = 7'b0000111;
+    parameter op_iLD = 7'b0000011;
     
     //alu_cmd:
     parameter R = 4'b0000, I = 4'b0001, S = 4'b0010, SB = 4'b0011, U = 4'b0100, UJ = 4'b0101;
@@ -92,7 +92,7 @@ module fd_param
     assign soma_imm = pc_out + (imm);
 
     //muxs:
-    assign pc_in = pc_src? soma_imm : soma_4;
+    assign pc_in = pc_src ? soma_imm : soma_4;
     assign alu_b = alu_src? imm:rs2_out; 
     assign rf_din = rf_src? d_mem_data:alu_out;
 
@@ -110,14 +110,14 @@ module fd_param
     reg[1:0] conta_3;
     wire clk_fd;
 
-    initial conta_3 = 0;
+    initial conta_3 <= 2;
 
     always@(posedge clk)begin
-        if (conta_3 == 2'b11) conta_3 = 0;
-        conta_3 = conta_3 + 1;
+        if (conta_3 == 2'b10) conta_3 <= 0;
+        else conta_3 <= conta_3 + 1;
     end
 
-    assign clk_fd = conta_3[0] & conta_3[1];
+    assign clk_fd =  conta_3[1];
 
 
 
@@ -177,7 +177,7 @@ wire [63:0]reg_out[31:0];
 genvar i;
 
 generate 
-    for(i=3;i<32;i=i+1) begin : GEN_BLOCK
+    for(i=1;i<32;i=i+1) begin : GEN_BLOCK
     register xN(din,clk,reg_out[i],load_reg[i]);
     end
 endgenerate 
@@ -187,9 +187,8 @@ assign rs2_out = reg_out[rs2];
 
 
 //para testes:
-assign reg_out[0] = 5;
-assign reg_out[1] = 4;
-assign reg_out[2] = 30;
+assign reg_out[0] = 0;
+
 
 
 

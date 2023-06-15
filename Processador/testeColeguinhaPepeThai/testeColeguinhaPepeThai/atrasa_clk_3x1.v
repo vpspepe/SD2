@@ -8,7 +8,7 @@ reg out;
 assign clk_out = (counter == 0) ? 1 : 0;
 
 initial begin
-    counter <= 2;
+    counter <= 0;
 end
 
 always @(posedge clk ) begin

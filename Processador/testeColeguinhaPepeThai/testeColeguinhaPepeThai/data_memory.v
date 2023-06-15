@@ -24,12 +24,23 @@ module data_memory(
 
     
 initial begin    // INICIALIZACAO DOS VALORES NA MEMÓRIA PARA FACILITAR NA TESTBENCH
+
+/*
     mem[0] = 0;
     mem[1] = 10;
     mem[2] = 20;
     mem[3] = 35;
     mem[4] = 40;
     mem[5] = -10;
+*/
+
+//Euclides
+    mem[0] = 0;
+    mem[1] = 5;
+    mem[2] = 17;
+    mem[5] = 64'b1000000000000000000000000000000000000000000000000000000000000000;
+
+
 end
 
 

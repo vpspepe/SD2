@@ -12,6 +12,7 @@ module fd(
 
 );
 
+wire clk_atrasado;
 wire [63:0] d_mem_data_in, d_mem_data_out; //entrada e saida da memoria ram
 wire [31:0] addr_instruction; //endereco da memoria que chega ate o memoria de instruoes
 wire [31:0] PC_addr; //endereco que entra no PC
@@ -34,6 +35,11 @@ assign opcode = instruction_IR_out[6:0];
 assign i_mem_addr = addr_instruction[7:2];
 assign d_mem_addr = ULA_OUT[5:0];
 assign d_mem_data_out = doutB;
+
+ atrasa_clk_3x1 redutor_de_clk(
+        .clk(clk),
+        .clk_out(clk_atrasado)
+    );
 
 
 Generator instruction_organizor ( //organiza os valores com base na instrucao de 32 bits
