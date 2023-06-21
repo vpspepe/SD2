@@ -1,0 +1,402 @@
+$date
+	Wed Jun 21 01:46:14 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	100ps
+$end
+$scope module float_addition_tb $end
+$scope module float_addition_tb $end
+$var wire 32 ! A [31:0] $end
+$var wire 32 " B [31:0] $end
+$var wire 1 # clk $end
+$var wire 1 $ op $end
+$var wire 1 % reset $end
+$var wire 1 & sum_mult_selector $end
+$var wire 8 ' shift_A [7:0] $end
+$var wire 32 ( result [31:0] $end
+$var wire 1 ) normalized $end
+$var wire 1 * normalize_selector $end
+$var wire 29 + fract_UC [28:0] $end
+$var wire 1 , exp_fract_selector $end
+$var wire 8 - exp_difference [7:0] $end
+$var wire 1 . done_ULA $end
+$var wire 1 / continue_selector $end
+$var wire 29 0 big_ULA_out [28:0] $end
+$var wire 1 1 ULA_START $end
+$scope module FD $end
+$var wire 32 2 A [31:0] $end
+$var wire 32 3 B [31:0] $end
+$var wire 1 # clk $end
+$var wire 8 4 exp_difference [7:0] $end
+$var wire 29 5 fract_UC [28:0] $end
+$var wire 1 % reset $end
+$var wire 29 6 ula_out [28:0] $end
+$var wire 1 & sum_mult_selector $end
+$var wire 8 7 small_ula_out [7:0] $end
+$var wire 1 8 sign_c $end
+$var wire 8 9 shift_A [7:0] $end
+$var wire 1 : sB $end
+$var wire 1 ; sA $end
+$var wire 32 < result [31:0] $end
+$var wire 1 ) normalized $end
+$var wire 1 * normalize_selector $end
+$var wire 23 = lower_fract [22:0] $end
+$var wire 29 > lower_ULAIN [28:0] $end
+$var wire 29 ? left_right_in [28:0] $end
+$var wire 23 @ higher_fract [22:0] $end
+$var wire 29 A higher_ULAIN [28:0] $end
+$var wire 29 B fract_shifted [28:0] $end
+$var wire 29 C fract_result [28:0] $end
+$var wire 23 D fractB [22:0] $end
+$var wire 23 E fractA [22:0] $end
+$var wire 8 F exp_result [7:0] $end
+$var wire 8 G exp_higher [7:0] $end
+$var wire 1 , exp_fract_selector $end
+$var wire 8 H exp_adjusted [7:0] $end
+$var wire 8 I expB [7:0] $end
+$var wire 8 J expA [7:0] $end
+$var wire 8 K exp [7:0] $end
+$var wire 1 . done_ULA $end
+$var wire 1 / continue_selector $end
+$var wire 29 L ULA_fract_OUT [28:0] $end
+$var wire 1 1 ULA_START $end
+$scope module MUX_EXP_HIGHER $end
+$var wire 8 M a [7:0] $end
+$var wire 8 N b [7:0] $end
+$var wire 1 O select $end
+$var wire 8 P result [7:0] $end
+$upscope $end
+$scope module MUX_INCREMENT_DECREMENT $end
+$var wire 8 Q a [7:0] $end
+$var wire 1 / select $end
+$var wire 8 R result [7:0] $end
+$var wire 8 S b [7:0] $end
+$upscope $end
+$scope module MUX_LEFT_RIGHT $end
+$var wire 1 / select $end
+$var wire 29 T result [28:0] $end
+$var wire 29 U b [28:0] $end
+$var wire 29 V a [28:0] $end
+$upscope $end
+$scope module MUX_ULAIN_HIGHER $end
+$var wire 23 W a [22:0] $end
+$var wire 23 X b [22:0] $end
+$var wire 1 Y select $end
+$var wire 23 Z result [22:0] $end
+$upscope $end
+$scope module MUX_ULAIN_LOWER $end
+$var wire 23 [ a [22:0] $end
+$var wire 23 \ b [22:0] $end
+$var wire 1 , select $end
+$var wire 23 ] result [22:0] $end
+$upscope $end
+$scope module arredonda $end
+$var wire 3 ^ seguranca [2:0] $end
+$var wire 1 ) normalized $end
+$var wire 29 _ fract_in [28:0] $end
+$var wire 8 ` exp_in [7:0] $end
+$var reg 8 a exp_out [7:0] $end
+$var reg 29 b fract_out [28:0] $end
+$upscope $end
+$scope module exp_ULA $end
+$var wire 8 c a [7:0] $end
+$var wire 8 d b [7:0] $end
+$var wire 1 & sum_mult_selector $end
+$var wire 8 e exp_difference [7:0] $end
+$upscope $end
+$scope module fract_ULA $end
+$var wire 29 f b [28:0] $end
+$var wire 1 # clk $end
+$var wire 1 % reset $end
+$var wire 1 ; sign_a $end
+$var wire 1 : sign_b $end
+$var wire 1 1 start $end
+$var wire 1 & op $end
+$var wire 48 g multiplicando [47:0] $end
+$var wire 24 h multiplicador [23:0] $end
+$var wire 29 i c [28:0] $end
+$var wire 29 j a [28:0] $end
+$var reg 5 k counter [4:0] $end
+$var reg 1 . done $end
+$var reg 48 l mult_result [47:0] $end
+$var reg 1 8 sign_c $end
+$var reg 29 m soma_result [28:0] $end
+$var reg 3 n states [2:0] $end
+$upscope $end
+$scope module incremento_decremento $end
+$var wire 8 o exp_in [7:0] $end
+$var wire 1 * increment_decrement $end
+$var wire 8 p exp_out [7:0] $end
+$upscope $end
+$scope module left_right $end
+$var wire 29 q A [28:0] $end
+$var wire 1 * shift_selector $end
+$var wire 29 r A_shifted [28:0] $end
+$upscope $end
+$scope module shift_right $end
+$var wire 29 s A [28:0] $end
+$var wire 1 & sum_mult_selector $end
+$var wire 8 t shift_num [7:0] $end
+$var wire 29 u A_shifted [28:0] $end
+$upscope $end
+$upscope $end
+$scope module UC $end
+$var wire 29 v big_ULA_out [28:0] $end
+$var wire 1 # clk $end
+$var wire 1 . done_ULA $end
+$var wire 8 w exp_difference [7:0] $end
+$var wire 29 x fract_UC [28:0] $end
+$var wire 1 $ op $end
+$var wire 1 % reset $end
+$var reg 1 1 ULA_START $end
+$var reg 1 / continue_selector $end
+$var reg 1 , exp_fract_selector $end
+$var reg 1 * normalize_selector $end
+$var reg 1 ) normalized $end
+$var reg 8 y shift_A [7:0] $end
+$var reg 4 z state [3:0] $end
+$var reg 1 & sum_mult_selector $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx z
+bx y
+bx x
+b0x0 w
+bx v
+bx u
+bx t
+b100000000000000000000001000 s
+bx r
+bx q
+bx p
+bx o
+bx n
+bx m
+bx l
+bx k
+bx j
+bx i
+bx h
+b0xxxxxxxxxxxxxxxxxxxxxxxx g
+b100000000000000000000001000 f
+b0x0 e
+b1 d
+b1 c
+bx b
+bx a
+bx `
+bx _
+bx ^
+b1 ]
+b1 \
+b1 [
+b1 Z
+xY
+b1 X
+b1 W
+bx V
+bx U
+bx T
+bx S
+bx R
+b1 Q
+b1 P
+xO
+b1 N
+b1 M
+bx L
+bx K
+b1 J
+b1 I
+bx H
+b1 G
+bx F
+b1 E
+b1 D
+bx C
+bx B
+b100000000000000000000001000 A
+b1 @
+bx ?
+bx >
+b1 =
+bx <
+0;
+0:
+bx 9
+x8
+b0x0 7
+bx 6
+bx 5
+b0x0 4
+b1000000000000000000000000000001 3
+b1000000000000000000000000000001 2
+x1
+bx 0
+x/
+x.
+b0x0 -
+x,
+bx +
+x*
+x)
+bx (
+bx '
+x&
+0%
+0$
+0#
+b1000000000000000000000000000001 "
+b1000000000000000000000000000001 !
+$end
+#1000
+b0 n
+b0 z
+1#
+1%
+#2000
+0#
+0%
+#3000
+bx10000000xxxxxxxxxxxxxxxxxxxxxxx (
+bx10000000xxxxxxxxxxxxxxxxxxxxxxx <
+b1 F
+b1 S
+b1 a
+b1 H
+b1 `
+b1 p
+b1 K
+b1 R
+b1 o
+1O
+1Y
+b0 -
+b0 4
+b0 w
+b0 7
+b0 e
+0.
+0)
+0,
+0*
+0&
+0/
+01
+b1 z
+1#
+#4000
+0#
+#5000
+b10 z
+1#
+#6000
+0#
+#7000
+0O
+0Y
+1,
+b11 z
+1#
+#8000
+0#
+#9000
+b100000000000000000000001 h
+b100000000000000000000001 g
+b100000000000000000000001000 >
+b100000000000000000000001000 j
+b100000000000000000000001000 u
+b0 '
+b0 9
+b0 t
+b0 y
+b100 z
+1#
+#10000
+0#
+#11000
+11
+1#
+#12000
+0#
+#13000
+b1 n
+1#
+#14000
+0#
+#15000
+b0 l
+b0 k
+b10 n
+1#
+#16000
+0#
+#17000
+b1000000000000000000000010000 +
+b1000000000000000000000010000 5
+b1000000000000000000000010000 x
+b1000000000000000000000010000 C
+b1000000000000000000000010000 U
+b1000000000000000000000010000 b
+b0 ^
+b1000000000000000000000010000 B
+b1000000000000000000000010000 _
+b1000000000000000000000010000 r
+b1000000000000000000000010000 ?
+b1000000000000000000000010000 T
+b1000000000000000000000010000 q
+b1000000000000000000000010000 0
+b1000000000000000000000010000 6
+b1000000000000000000000010000 v
+b1000000000000000000000010000 L
+b1000000000000000000000010000 V
+b1000000000000000000000010000 i
+b100 n
+b1000000000000000000000000000010 (
+b1000000000000000000000000000010 <
+08
+b1000000000000000000000010000 m
+1#
+#18000
+0#
+#19000
+1.
+1#
+#20000
+0#
+#21000
+b101 z
+1#
+#22000
+0#
+#23000
+b100000000000000000000001000 +
+b100000000000000000000001000 5
+b100000000000000000000001000 x
+b100000000000000000000001000 C
+b100000000000000000000001000 U
+b100000000000000000000001000 b
+b1000000100000000000000000000001 (
+b1000000100000000000000000000001 <
+b10 F
+b10 S
+b10 a
+b100000000000000000000001000 B
+b100000000000000000000001000 _
+b100000000000000000000001000 r
+b10 H
+b10 `
+b10 p
+1*
+b110 z
+1#
+#24000
+0#
+#25000
