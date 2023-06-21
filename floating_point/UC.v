@@ -9,8 +9,8 @@ module UC (
     output reg ULA_START,                   //indica quando a ULA deve inicar as contas
     output reg continue_selector,           //será 0 para selecionar a passagem do exp e do fract, mas será 1 após isso, para ficar fazendo looping até a normalização ocorrer.
     output reg sum_mult_selector,           //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
-    output reg normalize_selector,          //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
-    output reg exp_fract_selector,          //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual vai ser shiftado é o menor expoente
+    output reg [1:0]normalize_selector,          //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
+    output reg [1:0] exp_fract_selector,          //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual vai ser shiftado é o menor expoente
     output reg [7:0] shift_A,               //baseado no resultado de A-B, indica quantos shifts serão feitos para A entrar na ULA.
     output reg normalized                   //encerra a normalização assim que o fract estiver no formato correto. Exemplo: 0.001 (normalized = 0) -> 1.000 (normalized = 1)   
     
@@ -88,10 +88,13 @@ always@(posedge clk) begin
     end
     selectULAIN: begin
         if(exp_difference[7] == 1) begin // b > a
-            exp_fract_selector <= 0; // a será shiftado
+            exp_fract_selector <= 1; // a será shiftado
+        end
+        else if (exp_difference != 0) begin
+            exp_fract_selector <= 0;
         end
         else begin
-            exp_fract_selector <= 1;
+            exp_fract_selector <= 2;
         end
     end
     shiftaULAIN: begin
@@ -107,10 +110,15 @@ always@(posedge clk) begin
 
     selectRepeatedMux: begin
         if(big_ULA_out[28:27] != 2'b00) begin
-            normalize_selector <= 1'b1;
+            normalize_selector <= 1;
         end
+        
+        else if (big_ULA_out[26] != 1'b1) begin
+            normalize_selector <= 2;
+        end
+
         else begin
-            normalize_selector <= 1'b0;
+            normalize_selector <= 0;
         end
     end
 

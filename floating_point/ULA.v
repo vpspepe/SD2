@@ -83,8 +83,14 @@ always @(posedge clk) begin
             end
 
             else begin
-                soma_result <= b - a;
-                sign_c <= sign_b;
+                if(b>a) begin
+                    soma_result <= b - a;
+                    sign_c <= sign_b;
+                end
+                else begin
+                    soma_result <= a-b;
+                    sign_c <= sign_a;
+                end
             end
         end
 

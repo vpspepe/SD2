@@ -6,6 +6,7 @@ module float_addition (
     input reset
 );
 
+wire [1:0] normalize_selector;
 wire[7:0] exp_difference;
 wire [28:0] big_ULA_out;
 wire[28:0] fract_UC;
@@ -13,7 +14,7 @@ wire done_ULA;
 wire ULA_START;
 wire continue_selector;
 wire sum_mult_selector;
-wire exp_fract_selector;
+wire [1:0] exp_fract_selector;
 wire[7:0] shift_A;
 wire normalized;
 wire [31:0] result;

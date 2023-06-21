@@ -21,13 +21,25 @@ always @(posedge clk) begin
     end
 
     else begin
-        if (seguranca > 4) begin
+        if (seguranca > 5) begin
         fract_out[2:0] <= 3'b000;
         fract_out[28:3] <= fract_in[28:3] + 1;
         end
 
+        else  if (seguranca < 5) begin
+        fract_out[2:0] <= 3'b000;
+        fract_out[28:3] <= fract_in[28:3];
+        end
+
         else begin
-        fract_out <= fract_in;
+            if(fract_in[3] == 1'b0) begin
+                fract_out[2:0] <= 3'b000;
+                fract_out[28:3] <= fract_in[28:3];
+            end
+            else begin
+                fract_out[2:0] <= 3'b000;
+                fract_out[28:3] <= fract_in[28:3] + 1; 
+            end
         end
     end
 
