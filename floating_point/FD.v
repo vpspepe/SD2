@@ -16,7 +16,6 @@ output done_ULA,
 output [28:0] fract_UC
 );
 
-
 // separar as entradas de A e B entre os sinais, expoentes e fracao
 wire sA,sB;
 wire [7:0] expA, expB;
@@ -64,10 +63,11 @@ MUX2_23bits MUX_ULAIN_HIGHER( //seleciona quem nao precisa shiftar pra entrar na
 
 wire [28:0] lower_ULAIN;  //entrada menor da ULA
 wire [28:0] higher_ULAIN;
-
+wire[7:0] shift_A_modulo;
+assign shift_A_modulo = shift_A[7] ? (~shift_A) + 1 : shift_A;
 shift_right shift_right(
     .A({3'b001,lower_fract,3'b000}),
-    .shift_num(shift_A),
+    .shift_num(shift_A_modulo),
     .A_shifted(lower_ULAIN),
     .sum_mult_selector(sum_mult_selector)
 );
@@ -103,8 +103,10 @@ MUX2_8bits MUX_EXP_HIGHER(  //seleciona o exp maior para ser corrigido
 );
 
 wire [7:0] exp;
+wire [7:0] exp_in_mux_increment_decrement;
+assign exp_in_mux_increment_decrement = sum_mult_selector ? small_ula_out : exp_higher;
 MUX2_8bits MUX_INCREMENT_DECREMENT( //seleciona se o exp ou a saída do arredonda entra no incremento_decremento
-     .a(exp_higher), // result do MUX_EXP_LOWER
+     .a(exp_in_mux_increment_decrement), // result do MUX_EXP_LOWER
      .b(exp_result), // exp que vem do arredonda     
      .select(continue_selector),
      .result(exp)
@@ -118,6 +120,9 @@ incremento_decremento incremento_decremento(
 );
 
 wire [28:0] left_right_in;
+wire [28:0] fract_result;
+wire [7:0]  exp_result;
+
 MUX2_29bits MUX_LEFT_RIGHT( //seleciona se o fract que saiu da ULA ou a saída do arredonda entra no LEFT_RIGHT
      .a(ULA_fract_OUT),
      .b(fract_result),       
@@ -133,10 +138,8 @@ left_right left_right(
     .A_shifted(fract_shifted)
 );
 
-wire [28:0] fract_result;
-wire [7:0]  exp_result;
-
 arredonda arredonda(
+  .clk(clk),
   .normalized(normalized),
   .exp_in(exp_adjusted),
   .exp_out(exp_result),

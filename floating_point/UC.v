@@ -87,7 +87,7 @@ always@(posedge clk) begin
         sum_mult_selector <= op;     
     end
     selectULAIN: begin
-        if(exp_difference[2] == 1) begin // b > a
+        if(exp_difference[7] == 1) begin // b > a
             exp_fract_selector <= 0; // a será shiftado
         end
         else begin
@@ -113,7 +113,9 @@ always@(posedge clk) begin
             normalize_selector <= 1'b0;
         end
     end
+
     normalizing: begin
+        normalize_selector <= 1'b0;
         continue_selector <= 1'b1;         
     end
     

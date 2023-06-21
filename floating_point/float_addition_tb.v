@@ -19,10 +19,10 @@ float_addition float_addition_tb(
 initial begin
 $dumpfile("_testbenches/vvp/float_addition.vcd");
 $dumpvars(0, float_addition_tb);
-
-A_tb = {1'b0,8'b10000000,23'b00000000000000000000001};
-B_tb = {1'b0,8'b10000000,23'b00000000000000000000001};
-op_tb = 0;
+// iverilog .\float_addition_tb.v .\float_addition.v .\FD.v .\incremento_decremento.v .\left_right.v .\shift_right.v .\small_ULA.v .\ULA.v .\UC.v .\MUX2_23bits.v .\MUX2_29bits.v .\MUX2_8bits.v .\arredonda.v
+A_tb = {1'b0,8'b10000000,23'b10100000000000000000000};
+B_tb = {1'b0,8'b10000001,23'b11000000000000000000000};
+op_tb = 1;
 reset_tb = 0;
 clk_tb = 0;
 #10 
@@ -31,7 +31,7 @@ reset_tb = 1;
 #10 
 reset_tb = 0;
 
-#3000
+#5000
 $finish;
 
 end

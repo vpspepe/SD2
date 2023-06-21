@@ -1,4 +1,5 @@
 module arredonda(
+input clk,
  input normalized,
  input [7:0] exp_in,
  output reg [7:0] exp_out,
@@ -10,7 +11,7 @@ wire [2:0] seguranca;
 assign seguranca = fract_in[2:0];
 
 
-always @(*) begin
+always @(posedge clk) begin
     
     exp_out <= exp_in;
 
