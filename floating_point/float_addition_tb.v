@@ -20,8 +20,8 @@ initial begin
 $dumpfile("_testbenches/vvp/float_addition.vcd");
 $dumpvars(0, float_addition_tb);
 // iverilog .\float_addition_tb.v .\float_addition.v .\FD.v .\incremento_decremento.v .\left_right.v .\shift_right.v .\small_ULA.v .\ULA.v .\UC.v .\MUX2_23bits.v .\MUX2_29bits.v .\MUX2_8bits.v .\arredonda.v
-A_tb = {32'b11000000000000000000000000001111};
-B_tb = {32'b11000000000000000000000000000111};
+A_tb = {1'b1, 8'b10000000, 23'b00000000000000000001111};
+B_tb = {1'b1, 8'b10000000, 23'b00000000000000000000111};
 op_tb = 0;
 reset_tb = 0;
 clk_tb = 0;
@@ -31,7 +31,38 @@ reset_tb = 1;
 #10 
 reset_tb = 0;
 
-#5000
+
+#280
+
+
+#10
+reset_tb = 1;
+A_tb = {32'b01000000000000000000000000001111};
+B_tb = {32'b11000000000000000000000000000111};
+op_tb = 0;
+
+
+#10
+reset_tb = 0;
+
+#300
+A_tb = {32'b01000000000000000000000000001111};
+B_tb = {32'b11000000000000000000000000000111};
+op_tb = 0;
+
+#10 
+reset_tb = 0;
+
+#2000
+reset_tb = 1;
+A_tb = {32'b01000000000000000000000000001111};
+B_tb = {32'b11000000000000000000000000000111};
+op_tb = 1;
+
+#10 
+reset_tb = 0;
+
+#2000
 $finish;
 
 end

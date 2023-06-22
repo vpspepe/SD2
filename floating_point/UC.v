@@ -59,7 +59,7 @@ always @(posedge clk or posedge reset) begin
                 state <= arredonda;
             end
             arredonda: begin
-                if(fract_UC[28:27] == 2'b00) 
+                if(fract_UC[28:26] == 3'b001 | fract_UC == 0) 
                     state <= done;
                 else begin
                     state <= selectRepeatedMux;
@@ -78,7 +78,7 @@ always@(posedge clk) begin
     init: begin
         ULA_START <= 0;
         continue_selector <= 1'b0;
-        sum_mult_selector <= 1'b0;           
+        sum_mult_selector <= op;           
         normalize_selector <= 1'b0;          
         exp_fract_selector <= 1'b0;                      
         normalized <= 0;                  
