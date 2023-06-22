@@ -3,6 +3,7 @@ module ULA(
     input clk,
     input[28:0] a,
     input[28:0] b,
+    input [22:0] fractA, fractB,
     input sign_a, sign_b,
     input start,
     input op,
@@ -77,19 +78,33 @@ always @(posedge clk) begin
         end
 
         SOMA: begin
-            if(sign_a == sign_b) begin
+            if(sign_a == sign_b) begin //sign_a and sign_b == 1 ou sign_a and sign_b == 0 
                 soma_result <= a + b;
                 sign_c <= sign_a;
             end
+            
 
+            
             else begin
-                if(b>a) begin
-                    soma_result <= b - a;
-                    sign_c <= sign_b;
+                if (sign_a == 1) begin //sign_a == 1 e sign_b == 0
+                    if(fractA > fractB) begin  //fractA > fractB -> resultado negativo
+                        soma_result <= b - a;
+                        sign_c <= sign_a;
+                    end
+                    else begin                 //fractA < fractB -> resultado positivo
+                        soma_result <= b - a;
+                        sign_c <= sign_b;    
+                    end
                 end
-                else begin
-                    soma_result <= a-b;
-                    sign_c <= sign_a;
+                else begin      //sign_a == 0 e sign_b == 1,
+                    if(fractA > fractB) begin  //fractA > fractB -> resultado positivo
+                        soma_result <= b - a;
+                        sign_c <= sign_a;
+                    end
+                    else begin                 //fractA < fractB -> resultado negativo
+                        soma_result <= b - a;
+                        sign_c <= sign_b;    
+                    end
                 end
             end
         end

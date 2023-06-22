@@ -1,7 +1,7 @@
 module FD(
 input clk, reset,        
 input sum_mult_selector,  //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
-input [1:0]exp_fract_selector, //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual é o menor expoente     //baseado no valor de ULA_OUT, a UC decide se haverá shift de 1 pra direita ou pra esquerda.
+input exp_fract_selector, //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual é o menor expoente     //baseado no valor de ULA_OUT, a UC decide se haverá shift de 1 pra direita ou pra esquerda.
 input [1:0]normalize_selector,  //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
 input ULA_START,         
 input [7:0] shift_A,      //baseado no resultado de A-B, indica quantos shifts serão feitos para A entrar na ULA.
@@ -46,14 +46,14 @@ wire [22:0] lower_fract;
 wire [22:0] higher_fract;
 
 
-MUX2_23bits_ULALOW MUX_ULAIN_LOWER( //seleciona quem precisa shiftar pra entrar na ULA
+MUX2_23bits MUX_ULAIN_LOWER( //seleciona quem precisa shiftar pra entrar na ULA
      .a(fractA),
      .b(fractB),       
-     .select(exp_fract_selector),
+     .select(~exp_fract_selector),
      .result(lower_fract)
 );
 
-MUX2_23bits_ULAHIGH MUX_ULAIN_HIGHER( //seleciona quem nao precisa shiftar pra entrar na ULA
+MUX2_23bits MUX_ULAIN_HIGHER( //seleciona quem nao precisa shiftar pra entrar na ULA
      .a(fractA),
      .b(fractB),       
      .select(exp_fract_selector),
@@ -83,6 +83,8 @@ ULA fract_ULA(
     .clk(clk),
     .a(lower_ULAIN),
     .b(higher_ULAIN),
+    .fractA(fractA),
+    .fractB(fractB),
     .sign_a(sA), 
     .sign_b(sB),
     .start(ULA_START),
@@ -95,7 +97,7 @@ ULA fract_ULA(
 assign ula_out = ULA_fract_OUT;
 
 wire [7:0] exp_higher;
-MUX2_8bits_2 MUX_EXP_HIGHER(  //seleciona o exp maior para ser corrigido
+MUX2_8bits MUX_EXP_HIGHER(  //seleciona o exp maior para ser corrigido
      .a(expA),
      .b(expB),       
      .select(~exp_fract_selector),
@@ -105,7 +107,7 @@ MUX2_8bits_2 MUX_EXP_HIGHER(  //seleciona o exp maior para ser corrigido
 wire [7:0] exp;
 wire [7:0] exp_in_mux_increment_decrement;
 assign exp_in_mux_increment_decrement = sum_mult_selector ? small_ula_out : exp_higher;
-MUX2_8bits_1 MUX_INCREMENT_DECREMENT( //seleciona se o exp ou a saída do arredonda entra no incremento_decremento
+MUX2_8bits MUX_INCREMENT_DECREMENT( //seleciona se o exp ou a saída do arredonda entra no incremento_decremento
      .a(exp_in_mux_increment_decrement), // result do MUX_EXP_LOWER
      .b(exp_result), // exp que vem do arredonda     
      .select(continue_selector),

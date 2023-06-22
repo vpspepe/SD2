@@ -1,4 +1,4 @@
-module MUX2_8bits_1(
+module MUX2_8bits(
             input[7:0] a, 
             input[7:0] b,       //0 1
             input  select,
