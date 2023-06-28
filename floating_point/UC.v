@@ -1,19 +1,20 @@
 module UC (
     input clk, 
     input reset,
+    input start,
     input [7:0] exp_difference,         //valor da diferença entre os expoentes de A e B, que vão para ULA para saber se A ou se B é maior
     input [28:0] big_ULA_out,           //resultado da ULA que é usado para saber se é necessário shifitar o resultado para corrígi-lo
     input [28:0] fract_UC, 
     input done_ULA,
-    input op,                           //vem da testbench (0 -> soma e 1 -> mult)
+    input [1:0] op,                           //vem da testbench (00 -> soma e 10 -> mult)
     output reg ULA_START,                   //indica quando a ULA deve inicar as contas
     output reg continue_selector,           //será 0 para selecionar a passagem do exp e do fract, mas será 1 após isso, para ficar fazendo looping até a normalização ocorrer.
     output reg sum_mult_selector,           //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
     output reg [1:0]normalize_selector,          //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
     output reg exp_fract_selector,          //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual vai ser shiftado é o menor expoente
     output reg [7:0] shift_A,               //baseado no resultado de A-B, indica quantos shifts serão feitos para A entrar na ULA.
-    output reg normalized                   //encerra a normalização assim que o fract estiver no formato correto. Exemplo: 0.001 (normalized = 0) -> 1.000 (normalized = 1)   
-    
+    output reg normalized,                   //encerra a normalização assim que o fract estiver no formato correto. Exemplo: 0.001 (normalized = 0) -> 1.000 (normalized = 1)   
+    output reg done
 );
 
 reg [3:0] state;
@@ -34,8 +35,11 @@ always @(posedge clk or posedge reset) begin
 
     else begin
         case(state)
-            init: begin        
-                state <= smallULA;
+            init: begin    
+                if(start == 1'b1)     
+                    state <= smallULA;
+                else 
+                    state <= init;  
             end
             smallULA: begin
                 state <= selectULAIN;
@@ -76,15 +80,16 @@ always@(posedge clk) begin
 
     case(state)
     init: begin
-        ULA_START <= 0;
+        ULA_START <= 1'b0;
         continue_selector <= 1'b0;
-        sum_mult_selector <= op;           
+        sum_mult_selector <= op[1];           
         normalize_selector <= 1'b0;          
         exp_fract_selector <= 1'b0;                      
-        normalized <= 0;                  
+        normalized <= 1'b0;   
+        done <= 1'b0;               
     end
     smallULA: begin
-        sum_mult_selector <= op;     
+        sum_mult_selector <= op[1];     
     end
     selectULAIN: begin
         if(exp_difference[7] == 1) begin // b > a
@@ -99,13 +104,13 @@ always@(posedge clk) begin
         */
     end
     shiftaULAIN: begin
-        if(op == 1) // multiplicaçao
+        if(op == 2`b10) // multiplicaçao
             shift_A <= 0;
         else
             shift_A <= $unsigned(exp_difference);
     end
     bigULA: begin
-        sum_mult_selector <= op;
+        sum_mult_selector <= op[1];
         ULA_START <= 1;
     end
 
@@ -133,6 +138,7 @@ always@(posedge clk) begin
     end
     done: begin
         normalized <= 1'b1;
+        done <= 1'b1;
     end
     endcase
 end
