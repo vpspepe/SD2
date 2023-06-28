@@ -87,6 +87,7 @@ always@(posedge clk) begin
         exp_fract_selector <= 1'b0;                      
         normalized <= 1'b0;   
         done <= 1'b0;               
+        fract_UC <= 0;
     end
     smallULA: begin
         sum_mult_selector <= op[1];     

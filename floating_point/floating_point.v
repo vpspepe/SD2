@@ -1,12 +1,86 @@
+module fpu(
+    input clk,
+    input reset,
+    input start,
+    input [1:0] op,
+    input [31:0] A, B,
+    output [31:0] R,
+    output done
+);
+       
+wire [1:0] normalize_selector;
+wire[7:0] exp_difference;
+wire [28:0] big_ULA_out;
+wire[28:0] fract_UC;
+wire done_ULA;
+wire ULA_START;
+wire continue_selector;
+wire sum_mult_selector;
+wire exp_fract_selector;
+wire[7:0] shift_A;
+wire normalized;
+wire [31:0] result;
+wire inicializa;
+
+
+UC UC(
+    .clk(clk), 
+    .reset(reset),
+    .start(start),
+    .exp_difference(exp_difference),        
+    .big_ULA_out(big_ULA_out),          
+    .fract_UC(fract_UC), 
+    .done_ULA(done_ULA),
+    .op(op),      
+    .inicializa(inicializa),                     
+    .ULA_START(ULA_START),                   
+    .continue_selector(continue_selector),           
+    .sum_mult_selector(sum_mult_selector),           
+    .normalize_selector(normalize_selector),          
+    .exp_fract_selector(exp_fract_selector),         
+    .shift_A(shift_A),               
+    .normalized(normalized), 
+    .done(done)                  
+);
+
+FD FD(
+    .clk(clk),
+    .reset(reset),        
+    .op(sum_mult_selector), 
+    .exp_fract_selector(exp_fract_selector), 
+    .normalize_selector(normalize_selector),  
+    .ULA_START(ULA_START),         
+    .shift_A(shift_A),     
+    .A_in(A),          
+    .B_in(B), 
+    .inicializa(inicializa),
+    .normalized(normalized),       
+    .continue_selector(continue_selector),           
+    .exp_difference(exp_difference), 
+    .ula_out(big_ULA_out),  
+    .result(R),
+    .done_ULA(done_ULA),
+    .fract_UC(fract_UC)
+);
+
+//.\float_addition_tb.v .\float_addition.v .\FD.v .\UC.v .\MUX2_23bits.v .\MUX2_29bits.v .\MUX2_8bits.v .\ULA.v .\arredonda.v .\incremento_decremento.v .\left_right.v .\shift_right.v .\small_ULA.v
+
+endmodule
+
+
+
+
+
 module FD(
     input clk, reset,        
-    input sum_mult_selector,  //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
+    input op,  //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
     input exp_fract_selector, //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual é o menor expoente     //baseado no valor de ULA_OUT, a UC decide se haverá shift de 1 pra direita ou pra esquerda.
     input [1:0]normalize_selector,  //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
     input ULA_START,         
     input [7:0] shift_A,      //baseado no resultado de A-B, indica quantos shifts serão feitos para A entrar na ULA.
-    input [31:0] A,          
-    input [31:0] B,  
+    input [31:0] A_in,          
+    input [31:0] B_in,  
+    input inicializa,
     input normalized,       //encerra a normalização assim que o fract estiver no formato correto. Exemplo: 0.001 (normalized = 0) -> 1.000 (normalized = 1)
     input continue_selector,            //será 0 para selecionar a passagem do exp e do fract, mas será 1 após isso, para ficar fazendo looping até a normalização ocorrer.
     output [7:0] exp_difference, //valor da diferença entre os expoentes de A e B, que vão para ULA para saber se A ou se B é maior
@@ -14,6 +88,24 @@ module FD(
     output [31:0] result,
     output done_ULA,
     output [28:0] fract_UC
+    );
+
+    wire [31:0] A,B;
+    wire sum_mult_selector;
+
+    Reg32 regA(.x(A_in),
+                .clk(clk), .load(inicializa), 
+                .x_out(A), .reset(reset)
+    );
+
+    Reg32 regB(.x(B_in),
+                .clk(clk), .load(inicializa), 
+                .x_out(B), .reset(reset)
+    );
+
+    Reg1 regOP(.x(op),
+                .clk(clk), .load(inicializa), 
+                .x_out(sum_mult_selector), .reset(reset)
     );
 
     // separar as entradas de A e B entre os sinais, expoentes e fracao
@@ -164,7 +256,8 @@ module UC (
     input [28:0] big_ULA_out,           //resultado da ULA que é usado para saber se é necessário shifitar o resultado para corrígi-lo
     input [28:0] fract_UC, 
     input done_ULA,
-    input [1:0] op,                           //vem da testbench (00 -> soma e 10 -> mult)
+    input [1:0] op,                         //vem da testbench (00 -> soma e 10 -> mult)
+    output reg inicializa,                        //load para A,B e OP   
     output reg ULA_START,                   //indica quando a ULA deve inicar as contas
     output reg continue_selector,           //será 0 para selecionar a passagem do exp e do fract, mas será 1 após isso, para ficar fazendo looping até a normalização ocorrer.
     output reg sum_mult_selector,           //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
@@ -185,19 +278,26 @@ module UC (
             selectRepeatedMux = 5, // na primiera é 0 e depois sempre 1
             normalizing = 6, 
             arredonda = 7, // finish or not?
-            DONE = 8;
+            DONE = 8,
+            normalizado = 9,
+            IDLE = 10;
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk or reset) begin
         if (reset == 1)
-            state <= init;
+            state <= IDLE;
 
         else begin
             case(state)
-                init: begin    
-                    if(start == 1'b1)     
+
+                IDLE: begin
+                    if (start == 1)
+                        state <= init;
+                    else
+                        state <= IDLE;
+
+                end
+                init: begin   
                         state <= smallULA;
-                    else 
-                        state <= init;  
                 end
                 smallULA: begin
                     state <= selectULAIN;
@@ -227,8 +327,16 @@ module UC (
                         state <= selectRepeatedMux;
                     end
                 end
+                normalizado: begin
+                    state <= done;
+                end
                 done: begin
-                    state <= DONE;
+                    if (start == 0) 
+                        state <= IDLE;
+                    else
+                        state <= done;
+                
+                
                 end
             endcase
         end
@@ -237,17 +345,32 @@ module UC (
     always@(posedge clk) begin
 
         case(state)
+
+        IDLE: begin
+            if (reset == 1) begin
+                inicializa <= 1'b0;
+                ULA_START <= 1'b0;
+                continue_selector <= 1'b0;
+                sum_mult_selector <= op[1];           
+                normalize_selector <= 1'b0;          
+                exp_fract_selector <= 1'b0;                      
+                normalized <= 1'b0;   
+                done <= 1'b0;
+            end
+        end
         init: begin
+            inicializa <= 1'b1;
             ULA_START <= 1'b0;
             continue_selector <= 1'b0;
             sum_mult_selector <= op[1];           
             normalize_selector <= 1'b0;          
             exp_fract_selector <= 1'b0;                      
             normalized <= 1'b0;   
-            done <= 1'b0;               
+            done <= 1'b0;           
         end
         smallULA: begin
-            sum_mult_selector <= op[1];     
+            sum_mult_selector <= op[1];
+            inicializa <= 1'b0;     
         end
         selectULAIN: begin
             if(exp_difference[7] == 1) begin // b > a
@@ -290,16 +413,70 @@ module UC (
             normalize_selector <= 1'b0;
             continue_selector <= 1'b1;         
         end
-        
+
         arredonda: begin
             // não faz nada   
         end
-        DONE: begin
+
+        normalizado: begin
             normalized <= 1'b1;
+        end
+
+        DONE: begin
             done <= 1'b1;
         end
         endcase
     end
+
+endmodule
+
+module Reg32(x,
+                clk, load, 
+                x_out,reset
+);
+
+parameter N = 32; //tamanho do registrador parametrizável
+
+input[N-1:0] x;   //entrada
+input clk, load,reset;  
+output reg[N-1:0] x_out; //saída
+
+
+always @(posedge clk | reset) begin
+    if (reset) begin
+        x_out <= 0;
+    end
+    else begin
+        if (load) begin
+            x_out <= x;
+        end
+    end
+end
+
+endmodule
+
+module Reg1(x,
+                clk, load, 
+                x_out,reset
+);
+
+parameter N = 1; //tamanho do registrador parametrizável
+
+input[N-1:0] x;   //entrada
+input clk, load,reset;  
+output reg[N-1:0] x_out; //saída
+
+
+always @(negedge clk | reset) begin
+    if (reset) begin
+        x_out <= 0;
+    end
+    else begin
+        if (load) begin
+            x_out <= x;
+        end
+    end
+end
 
 endmodule
 
@@ -564,68 +741,3 @@ module left_right(
 
 endmodule
 
-module fpu(
-    input clk,
-    input reset,
-    input start,
-    input [1:0] op,
-    input [31:0] A, B,
-    output [31:0] R,
-    output done
-);
-       
-wire [1:0] normalize_selector;
-wire[7:0] exp_difference;
-wire [28:0] big_ULA_out;
-wire[28:0] fract_UC;
-wire done_ULA;
-wire ULA_START;
-wire continue_selector;
-wire sum_mult_selector;
-wire exp_fract_selector;
-wire[7:0] shift_A;
-wire normalized;
-
-assign done = normalized;
-
-UC UC(
-    .clk(clk), 
-    .reset(reset),
-    .start(start),
-    .exp_difference(exp_difference),        
-    .big_ULA_out(big_ULA_out),          
-    .fract_UC(fract_UC), 
-    .done_ULA(done_ULA),
-    .op(op),                           
-    .ULA_START(ULA_START),                   
-    .continue_selector(continue_selector),           
-    .sum_mult_selector(sum_mult_selector),           
-    .normalize_selector(normalize_selector),          
-    .exp_fract_selector(exp_fract_selector),         
-    .shift_A(shift_A),               
-    .normalized(normalized), 
-    .done(done)                  
-);
-
-FD FD(
-    .clk(clk),
-    .reset(reset),        
-    .sum_mult_selector(sum_mult_selector), 
-    .exp_fract_selector(exp_fract_selector), 
-    .normalize_selector(normalize_selector),  
-    .ULA_START(ULA_START),         
-    .shift_A(shift_A),     
-    .A(A),          
-    .B(B),  
-    .normalized(normalized),       
-    .continue_selector(continue_selector),           
-    .exp_difference(exp_difference), 
-    .ula_out(big_ULA_out),  
-    .result(R),
-    .done_ULA(done_ULA),
-    .fract_UC(fract_UC)
-);
-
-//.\float_addition_tb.v .\float_addition.v .\FD.v .\UC.v .\MUX2_23bits.v .\MUX2_29bits.v .\MUX2_8bits.v .\ULA.v .\arredonda.v .\incremento_decremento.v .\left_right.v .\shift_right.v .\small_ULA.v
-
-endmodule
