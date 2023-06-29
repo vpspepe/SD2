@@ -24,7 +24,7 @@ module polirv
         wire [6:0] opcode;
         wire [3:0] alu_flags;
 
- fd_entrega FD(
+ fd_gaston FD(
         .clk(clk), .rst_n(rst_n),                  
         .opcode(opcode),                    
         .d_mem_we(d_mem_we), .rf_we(rf_we),             
