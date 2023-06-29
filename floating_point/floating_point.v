@@ -552,12 +552,12 @@ module arredonda(
         
         exp_out <= exp_in;
 
-        if (normalized == 0) begin
+        // if (normalized == 0) begin
             
-            fract_out <= fract_in;
-        end
+        //     fract_out <= fract_in;
+        // end
 
-        else begin
+        // else begin
             if (seguranca > 5) begin
             fract_out[2:0] <= 3'b000;
             fract_out[28:3] <= fract_in[28:3] + 1;
@@ -580,7 +580,7 @@ module arredonda(
             end
         end
 
-    end
+    //end
 
 endmodule
 
@@ -673,7 +673,7 @@ module ULA(
                 
                 else begin
                     if (sign_a == 1) begin //sign_a == 1 e sign_b == 0
-                        if(fractA > fractB) begin  //fractA > fractB -> resultado negativo
+                        if(a > b) begin  //fractA > fractB -> resultado negativo
                             soma_result <= b - a;
                             sign_c <= sign_a;
                         end
@@ -683,7 +683,7 @@ module ULA(
                         end
                     end
                     else begin      //sign_a == 0 e sign_b == 1,
-                        if(fractA > fractB) begin  //fractA > fractB -> resultado positivo
+                        if(a > b) begin  //fractA > fractB -> resultado positivo
                             soma_result <= b - a;
                             sign_c <= sign_a;
                         end
