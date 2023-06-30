@@ -92,7 +92,6 @@ module FD(
 
     wire [31:0] A,B;
     wire sum_mult_selector;
-
     Reg32 regA(.x(A_in),
                 .clk(clk), .load(inicializa), 
                 .x_out(A), .reset(reset)
@@ -173,6 +172,7 @@ module FD(
     ULA fract_ULA(
         .reset(reset),
         .clk(clk),
+        .exp_difference(exp_difference),
         .a(lower_ULAIN),
         .b(higher_ULAIN),
         .fractA(fractA),
@@ -192,13 +192,17 @@ module FD(
     MUX2_8bits MUX_EXP_HIGHER(  //seleciona o exp maior para ser corrigido
         .a(expA),
         .b(expB),       
-        .select(~exp_fract_selector),
+        .select(exp_fract_selector),
         .result(exp_higher)
     );
 
     wire [7:0] exp;
     wire [7:0] exp_in_mux_increment_decrement;
     assign exp_in_mux_increment_decrement = sum_mult_selector ? small_ula_out : exp_higher;
+    wire [28:0] left_right_in;
+    wire [28:0] fract_result;
+    wire [7:0]  exp_result;
+
     MUX2_8bits MUX_INCREMENT_DECREMENT( //seleciona se o exp ou a saída do arredonda entra no incremento_decremento
         .a(exp_in_mux_increment_decrement), // result do MUX_EXP_LOWER
         .b(exp_result), // exp que vem do arredonda     
@@ -213,9 +217,6 @@ module FD(
         .exp_out(exp_adjusted)
     );
 
-    wire [28:0] left_right_in;
-    wire [28:0] fract_result;
-    wire [7:0]  exp_result;
 
     MUX2_29bits MUX_LEFT_RIGHT( //seleciona se o fract que saiu da ULA ou a saída do arredonda entra no LEFT_RIGHT
         .a(ULA_fract_OUT),
@@ -262,7 +263,7 @@ module UC (
     output reg continue_selector,           //será 0 para selecionar a passagem do exp e do fract, mas será 1 após isso, para ficar fazendo looping até a normalização ocorrer.
     output reg sum_mult_selector,           //seleciona se vai ser uma operacao de soma ou de multiplicacao entre A e B
     output reg [1:0]normalize_selector,          //baseado no resultado da ULA, sabe se será necessário shiftar praa direita ou esquerda e se vai incrementar ou decrementar
-    output reg exp_fract_selector,          //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual vai ser shiftado é o menor expoente
+    output reg  exp_fract_selector,          //baseado no valor de (a-b) seleciona quais vao ser as entradas da ULA e qual vai ser shiftado é o menor expoente
     output reg [7:0] shift_A,               //baseado no resultado de A-B, indica quantos shifts serão feitos para A entrar na ULA.
     output reg normalized,                   //encerra a normalização assim que o fract estiver no formato correto. Exemplo: 0.001 (normalized = 0) -> 1.000 (normalized = 1)   
     output reg done
@@ -282,11 +283,14 @@ module UC (
             normalizado = 9,
             IDLE = 10;
 
-    always @(posedge clk or reset) begin
-        if (reset == 1)
+    always @(*) begin
+        if(reset)
             state <= IDLE;
+        
+    end
 
-        else begin
+    always @(posedge clk) begin
+
             case(state)
 
                 IDLE: begin
@@ -294,7 +298,6 @@ module UC (
                         state <= init;
                     else
                         state <= IDLE;
-
                 end
                 init: begin   
                         state <= smallULA;
@@ -328,19 +331,18 @@ module UC (
                     end
                 end
                 normalizado: begin
-                    state <= done;
+                    state <= DONE;
                 end
-                done: begin
+                DONE: begin
                     if (start == 0) 
                         state <= IDLE;
                     else
-                        state <= done;
+                        state <= DONE;
                 
                 
                 end
             endcase
         end
-    end
 
     always@(posedge clk) begin
 
@@ -379,10 +381,10 @@ module UC (
             else if (exp_difference != 0) begin // a > b
                 exp_fract_selector <= 0;
             end
-            /*else begin
-                exp_fract_selector <= 2;
+            else begin
+                exp_fract_selector <= 1;
             end
-            */
+            
         end
         shiftaULAIN: begin
             if(op == 2'b10) // multiplicaçao
@@ -587,6 +589,7 @@ endmodule
 module ULA(
         input reset,
         input clk,
+        input[7:0] exp_difference,
         input[28:0] a,
         input[28:0] b,
         input [22:0] fractA, fractB,
@@ -612,41 +615,55 @@ module ULA(
     assign c = !op ? soma_result : {1'b0,mult_result[47:21],1'b0};
 
     always @* begin
-        if(reset)
+        if(reset) begin
             states <= IDLE;
+            mult_result <= 0;
+            soma_result <= 0;
+            counter <= 0;
+            multiplicador_efetivo <= 0;
+        end
     end
 
     always @(posedge clk ) begin
-        case (states)
-            IDLE: begin
-                if(start == 1)
-                    states <= START;
-                else
-                    states <= IDLE;
-            end
-
-            START: begin
-                if(op == 0)
-                    states <= SOMA;
-                else
-                    states <= MULT;
-            end
-
-            SOMA: 
-                states <= DONE;
+        if (!reset) begin
             
+            case (states)
+                IDLE: begin
+                    if(start == 1)
+                        states <= START;
+                    else
+                        states <= IDLE;
+                end
 
-            MULT: begin
-                if(counter == 24)
+                START: begin
+                    mult_result <= 0;
+                    soma_result <= 0;
+                    counter <= 0;
+                    multiplicador_efetivo <= 0;
+                    if(op == 0)
+                        states <= SOMA;
+                    else
+                        states <= MULT;
+                end
+
+                SOMA: 
                     states <= DONE;
-                else
-                    states <= MULT;
-            end
+                
 
-            DONE:
-                states <= DONE;
+                MULT: begin
+                    if(counter == 24)
+                        states <= DONE;
+                    else
+                        states <= MULT;
+                end
 
-        endcase
+                DONE: begin
+                    if(!start)
+                        states <= IDLE;
+                end
+
+            endcase
+        end
     end
 
 
@@ -655,8 +672,13 @@ module ULA(
             states <= IDLE;
 
         case(states)
-            IDLE:
+            IDLE: begin
                 done <= 0;
+                mult_result <= 0;
+                soma_result <= 0;
+                counter <= 0;
+                multiplicador_efetivo <= 0;
+            end
 
             START: begin
                 counter <= 0;
@@ -669,31 +691,57 @@ module ULA(
                     sign_c <= sign_a;
                 end
                 
-
-                
                 else begin
-                    if (sign_a == 1) begin //sign_a == 1 e sign_b == 0
-                        if(a > b) begin  //fractA > fractB -> resultado negativo
-                            soma_result <= b - a;
+                    
+
+                    if (exp_difference[7]) begin //b com ctz eh maior que a
+                        sign_c <= sign_b;
+                        soma_result <= b - a;
+                    end
+
+                    else begin
+
+                    if(exp_difference == 7'b0) begin
+                        if(fractA > fractB) begin
                             sign_c <= sign_a;
+                            soma_result <= a  - b;
                         end
-                        else begin                 //fractA < fractB -> resultado positivo
-                            soma_result <= b - a;
-                            sign_c <= sign_b;    
+
+                        else begin
+                            sign_c <= sign_b;
+                            soma_result <= b - a ;
                         end
                     end
-                    else begin      //sign_a == 0 e sign_b == 1,
-                        if(a > b) begin  //fractA > fractB -> resultado positivo
-                            soma_result <= b - a;
-                            sign_c <= sign_a;
-                        end
-                        else begin                 //fractA < fractB -> resultado negativo
-                            soma_result <= b - a;
-                            sign_c <= sign_b;    
-                        end
+                    else begin
+                        sign_c <= sign_a;
+                        soma_result <= a - b;
                     end
-                end
+                        
+
+
+                    //if (sign_a == 1) begin //sign_a == 1 e sign_b == 0
+                        // if(a < b) begin  //fractA > fractB -> resultado negativo
+                        //     soma_result <= b - a;
+                        //     sign_c <= sign_b;
+                        // end
+                        // else begin                 //fractA < fractB -> resultado positivo
+                        //     soma_result <= a-b;
+                        //     sign_c <= sign_a;    
+                        // end
+                    end
+                    // else begin      //sign_a == 0 e sign_b == 1,
+                    //     if(a > b) begin  //fractA > fractB -> resultado positivo
+                    //         soma_result <= b - a;
+                    //         sign_c <= sign_a;
+                    //     end
+                    //     else begin                 //fractA < fractB -> resultado negativo
+                    //         soma_result <= b - a;
+                    //         sign_c <= sign_b;    
+                    //     end
+                    // end
+                //end
             end
+        end
 
             MULT: begin
                 sign_c <= sign_a ^ sign_b;
